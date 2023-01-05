@@ -4,7 +4,7 @@
 # by pushing and then setting up the git config
 #
 # Thanks to ENTP:
-# http://hoth.entp.com/2008/11/10/improving-my-git-workflow
+# https://hoth.entp.com/2008/11/10/improving-my-git-workflow
 
 curr_branch=$(git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||')
 
