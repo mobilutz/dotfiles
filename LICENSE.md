@@ -1,6 +1,6 @@
 The MIT License
 
-Copyright (c) Zach Holman, http://zachholman.com
+Copyright (c) Lutz Lengemann, https://www.lengemann.net
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
