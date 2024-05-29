@@ -1,5 +1,5 @@
 # Use `hub` as our git wrapper:
-#   https://defunkt.github.com/hub/
+#   https://hub.github.com/
 hub_path=$(which hub)
 if (( $+commands[hub] ))
 then
