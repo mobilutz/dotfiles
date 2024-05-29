@@ -1,9 +1,11 @@
 alias reload!='. ~/.zshrc'
 
 alias cls='clear' # Good 'ol Clear Screen command
+alias cat='bat'
+alias ls='eza'
 
-alias zshconfig="mate ~/.zshrc"
-alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconfig="code ~/.zshrc"
+alias ohmyzsh="code ~/.oh-my-zsh"
 alias biggest="du -sk * | sort -rn | head -11"
 alias rsp='bundle exec rails s -b 0.0.0.0 -p 3000 -u puma'
 alias rs='bundle exec rails s -b 0.0.0.0'
@@ -41,7 +43,8 @@ alias homebrew='brew'
 alias ll='ls -ahl'
 alias rubo="be rubocop -a \$(git status -s | ruby -ne 'print \$_.split(\" \").last, \" \"')"
 alias listen="sudo lsof -i -P | grep -i \"listen\""
-alias c-'code'
+alias c='code'
 alias gcm='git commit --no-verify -m'
 
-alias convert_heic='for f in *.HEIC; do sips -s format jpeg "${f}" --out "${f%.*}.jpg"; done'
+alias convert_heic='for f in *.[hH][eE][iI][cC]; do sips -s format jpeg "${f}" --out "${f%.*}.jpg"; rm "${f}"; done'
+alias exif_rename='for f in *.[jJ][pP]*[gG]; do jhead -n%Y-%m-%d_%H-%M-%S "${f}"; done'
