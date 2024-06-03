@@ -9,7 +9,7 @@ alias ohmyzsh="code ~/.oh-my-zsh"
 alias biggest="du -sk * | sort -rn | head -11"
 alias rsp='bundle exec rails s -b 0.0.0.0 -p 3000 -u puma'
 alias rs='bundle exec rails s -b 0.0.0.0'
-alias rsu 'bundle exec unicorn -l 0.0.0.0:3000 -E development -c config/unicorn.rb'
+alias rsu='bundle exec unicorn -l 0.0.0.0:3000 -E development -c config/unicorn.rb'
 alias rc='bundle exec rails c'
 alias rdm='bundle exec rake db:migrate && bundle exec rake db:test:prepare'
 alias rdr='bundle exec rake db:rollback && bundle exec rake db:test:prepare'
