@@ -42,7 +42,7 @@ export DOTZSH=$HOME/.dotfiles
 
 # Update dotfiles themselves
 echo "› git pull"
-git -C $ZSH pull
+git -C $DOTZSH pull
 
 # Set macOS defaults
 $DOTZSH/macos/set-defaults.sh
