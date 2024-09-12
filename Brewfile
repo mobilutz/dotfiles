@@ -15,7 +15,7 @@ brew 'heroku'
 brew 'htop'
 brew 'imagemagick'
 brew 'minio'
-brew 'n'
+# brew 'n' # -> use asdf
 # brew 'node'
 brew 'oci-cli'
 brew 'puma/puma/puma-dev'
@@ -38,7 +38,7 @@ brew 'z'
 cask '1password'
 cask '1password-cli'
 # cask 'airtable'
-cask 'alfred'
+cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/Alfred Settings
 cask 'ao' # Microsoft To-Fo
 cask 'anydesk'
 # cask 'arq'
