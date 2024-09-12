@@ -23,4 +23,5 @@ if [ "$normal_hostname" != "$hostname" ]; then
   echo "Changing hostname from $hostname to $normal_hostname"
   scutil --set LocalHostName "$normal_hostname"
   scutil --set ComputerName "$normal_hostname"
+  scutil --set ComputerName "$normal_hostname"
 fi
