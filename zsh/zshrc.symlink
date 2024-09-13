@@ -312,7 +312,8 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 
 # asdf https://asdf-vm.com/
 . /usr/local/opt/asdf/libexec/asdf.sh
-. ~/.asdf/plugins/dotnet/set-dotnet-env.zsh
+# No dotnet needed anymore
+# . ~/.asdf/plugins/dotnet/set-dotnet-env.zsh
 
 # 1Password GitHub Integration
 # https://developer.1password.com/docs/cli/shell-plugins/github/
