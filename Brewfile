@@ -75,7 +75,7 @@ cask 'microsoft-teams'
 cask 'microsoft-word'
 cask 'mqtt-explorer'
 cask 'opera'
-cask 'osxfuse'
+# cask 'osxfuse' # Does not work with macOS >= 14
 cask 'path-finder'
 cask 'postgres-unofficial'
 cask 'postico'
