@@ -316,7 +316,7 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 
 # 1Password GitHub Integration
 # https://developer.1password.com/docs/cli/shell-plugins/github/
-source ~/.config/op/plugins.sh
+# source ~/.config/op/plugins.sh
 
 # kubectl plugin krew
 # https://krew.sigs.k8s.io/docs/user-guide/setup/install/
