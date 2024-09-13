@@ -31,6 +31,7 @@ brew 'wget'
 brew 'yt-dlp'
 brew 'z'
 brew 'zsh-autosuggestions'
+brew 'zsh-syntax-highlighting'
 
 ##### ToDo
 # disk-graph
