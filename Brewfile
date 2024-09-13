@@ -9,7 +9,7 @@ brew 'awscli'
 brew 'bat'
 brew 'esptool'
 brew 'eza'
-brew 'docker'
+# brew 'docker' # Docker cask is enough!!!
 brew 'git-secrets'
 brew 'heroku'
 brew 'htop'
@@ -20,6 +20,7 @@ brew 'minio'
 # brew 'n' # -> use asdf
 # brew 'node'
 brew 'oci-cli'
+brew 'php'
 brew 'puma/puma/puma-dev'
 brew 'rbenv'
 brew 'shpotify'
@@ -29,6 +30,7 @@ brew 'vim'
 brew 'wget'
 brew 'yt-dlp'
 brew 'z'
+brew 'zsh-autosuggestions'
 
 ##### ToDo
 # disk-graph
