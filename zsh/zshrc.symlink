@@ -1,3 +1,16 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH="/Users/ll/.oh-my-zsh"
+
 # shortcut to this dotfiles path is $DOTZSH
 export DOTZSH=$HOME/.dotfiles
 
@@ -48,3 +61,266 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ZSH_THEME="robbyrussell"
+ZSH_THEME=powerlevel10k/powerlevel10k
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+DISABLE_MAGIC_FUNCTIONS="true"
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Silence ssh-add output - https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent#ssh-add-args
+zstyle :omz:plugins:ssh-agent ssh-add-args -q
+
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(asdf git ssh-agent brew heroku vscode ruby yarn zsh-autosuggestions z)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+alias cat='bat'
+alias ls='eza'
+alias zshconfig="code ~/.zshrc"
+alias ohmyzsh="code ~/.oh-my-zsh"
+alias biggest="du -sk * | sort -rn | head -11"
+alias rsp='bundle exec rails s -b 0.0.0.0 -p 3000 -u puma'
+alias rs='bundle exec rails s -b 0.0.0.0'
+alias rsu='bundle exec unicorn -l 0.0.0.0:3000 -E development -c config/unicorn.rb'
+alias rc='bundle exec rails c'
+alias rdm='bundle exec rake db:migrate && bundle exec rake db:test:prepare'
+alias rdr='bundle exec rake db:rollback && bundle exec rake db:test:prepare'
+alias rdp='bundle exec rake db:populate && bundle exec rake db:test:prepare'
+alias rgm='bundle exec rails generate migration'
+alias rdtp='bundle exec rake db:test:prepare'
+alias hc='heroku run rails c'
+alias hpg= 'heroku pg:psql'
+alias hmon='heroku maintenance:on'
+alias hmoff='heroku maintenance:off'
+alias hpsql='heroku pg:psql'
+alias hl='heroku logs -t'
+alias be='bundle exec'
+alias bi='bundle install'
+alias bu='bundle update'
+alias dce='docker-compose exec app'
+alias dcup='docker-compose up -d'
+alias dcdown='docker-compose down'
+alias dcbe='dce bundle exec'
+alias dcstart='docker-compose start'
+alias dcstop='docker-compose stop'
+alias dcbi='dce bundle install'
+alias dcrc='dcbe rails c'
+alias dcbuild='docker-compose build'
+alias dcrdm='dcbe rails db:migrate:with_data db:test:prepare'
+alias console='bundle exec rails c'
+alias et='code'
+alias gst='git status -sb'
+alias addnw=!sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
+alias homebrew='brew'
+alias ll='ls -ahl'
+alias rubo="be rubocop -a \$(git status -s | ruby -ne 'print \$_.split(\" \").last, \" \"')"
+alias listen="sudo lsof -i -P | grep -i \"listen\""
+alias c='code'
+alias gcm='git commit --no-verify -m'
+alias convert_heic='for f in *.[hH][eE][iI][cC]; do sips -s format jpeg "${f}" --out "${f%.*}.jpg"; rm "${f}"; done'
+alias exif_rename='for f in *.[jJ][pP]*[gG]; do jhead -n%Y-%m-%d_%H-%M-%S "${f}"; done'
+alias mov_rename='for f in IMG_*.[mM][oOp][vV4]; do new_f="${f:4:4}-${f:8:2}-${f:10:2}_${f:13:2}-${f:15:2}-${f:17:2}.${f/*./}"; echo "\tRenaming $f  ->  ${new_f}"; mv $f $new_f; done'
+alias convert_images='convert_heic; exif_rename; mov_rename'
+
+function dockersize() {
+  docker manifest inspect -v "$1" | jq -c 'if type == "array" then .[] else . end' |  jq -r '[ ( .Descriptor.platform | [ .os, .architecture, .variant, ."os.version" ] | del(..|nulls) | join("/") ), ( [ .SchemaV2Manifest.layers[].size ] | add ) ] | join(" ")' | numfmt --to iec --format '%.2f' --field 2 | column -t ;
+}
+
+function gitcombine() {
+	if [ "$1" != "" ]
+	then
+		git rebase -i HEAD~$@
+	else
+		echo "call 'gitcombine' with one paramter"
+		exit 1
+	fi
+}
+
+# This add a current change into a past commit.
+# The commits SHA needs to be passed as a second parameter.
+#
+# USAGE:   git-amend-to 12345
+#
+function git-amend-to() (
+  # Stash, apply to past commit, and rebase the current branch on to of the result.
+  current_branch="$(git rev-parse --abbrev-ref HEAD)"
+  apply_to="$1"
+  git stash
+  git checkout "$apply_to"
+  git stash pop
+  git add -u
+  git commit --amend --no-edit
+  new_sha="$(git log --format="%H" -n 1)"
+  git checkout "$current_branch"
+  git rebase --onto "$new_sha" "$apply_to"
+)
+export EDITOR="/usr/local/bin/code -w"
+export BUNLDER_EDITOR="/usr/local/bin/code -w"
+export GEM_OPEN_EDITOR="/usr/local/bin/code -w"
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# show ssh keys with file:
+# ref: https://unix.stackexchange.com/a/566474
+function ssh-add_wf() {
+    while read -r line; do
+        for file in ~/.ssh/*.pub;
+        do
+            printf "%s %s\n" "$(ssh-keygen -lf "$file" | awk '{$1=""}1')" "$file";
+        done | column -t | grep --color=auto "$line" || echo "$line";
+    done < <(ssh-add -l | awk '{print $2}')
+}
+
+# Automatic OhMyZSH Update
+export DISABLE_UPDATE_PROMPT=true
+
+
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+
+export RBENV_ROOT=/usr/local/var/rbenv
+eval "$(rbenv init -)"
+
+. /usr/local/etc/profile.d/z.sh
+
+
+# set the file open limit higher
+ulimit -n 4096
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH="/usr/local/sbin:$PATH"
+
+# For GPG to work
+export GPG_TTY=$(tty)
+
+# brew install zsh-syntax-highlighting
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# heroku autocomplete setup
+HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
+
+# rbenv install fails because of zlib
+# https://github.com/rbenv/ruby-build/issues/832#issuecomment-160906530
+RUBY_CONFIGURE_OPTS=--with-zlib-dir="$(brew --prefix zlib)"
+
+# Github PAT from MobiLutz
+export GITHUB_TOKEN=____REPLACE_WITH_GITHUB_PAT____
+
+export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=${GITHUB_TOKEN}:x-oauth-basic
+export BUNDLE_GITHUB__COM=x-access-token:${GITHUB_TOKEN}
+export NODE_AUTH_TOKEN=${parts[2]}
+
+# Google Cloud SDK
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+
+# Compose bins
+export PATH="$PATH:$HOME/.composer/vendor/bin"
+
+# Fix for puma
+# https://github.com/darkskyapp/forecast-ruby/issues/13#issuecomment-432464692
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+# Enable helm OCI support (experimental) https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-gke#local-shell
+export HELM_EXPERIMENTAL_OCI=1
+
+# dotnet tools
+export PATH="$PATH:$HOME/.dotnet/tools"
+
+# asdf https://asdf-vm.com/
+. /usr/local/opt/asdf/libexec/asdf.sh
+. ~/.asdf/plugins/dotnet/set-dotnet-env.zsh
+
+# 1Password GitHub Integration
+# https://developer.1password.com/docs/cli/shell-plugins/github/
+source ~/.config/op/plugins.sh
+
+# kubectl plugin krew
+# https://krew.sigs.k8s.io/docs/user-guide/setup/install/
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

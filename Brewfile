@@ -14,6 +14,7 @@ brew 'git-secrets'
 brew 'heroku'
 brew 'htop'
 brew 'imagemagick'
+brew 'jhead'
 brew 'minio'
 # brew 'n' # -> use asdf
 # brew 'node'
@@ -29,19 +30,14 @@ brew 'yt-dlp'
 brew 'z'
 
 ##### ToDo
-# jhead
-# disk-inventroy
-# cleen my drive
-
+# disk-graph
 # davinci resolve -> Not possible
 
 cask '1password'
 cask '1password-cli'
-# cask 'airtable'
 cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/Alfred Settings
-cask 'ao' # Microsoft To-Fo
+cask 'ao' # Microsoft To-Do
 cask 'anydesk'
-# cask 'arq'
 cask 'betterdisplay'
 cask 'bettermouse' # https://better-mouse.com/
 cask 'brave-browser'
@@ -60,13 +56,12 @@ cask 'evernote'
 cask 'exifrenamer'
 cask 'filemon'
 cask 'firefox'
-# cask 'flux'
+# cask 'flux' # Screen color temperatur controller
 cask 'fmail'
 cask 'franz'
 cask 'fujitsu-scansnap-home'
 cask 'github'
 cask 'gpg-suite-no-mail'
-# cask 'handbrake'
 cask 'hiddenbar'
 cask 'istat-menus'
 cask 'iterm2'
@@ -79,11 +74,9 @@ cask 'microsoft-outlook'
 cask 'microsoft-teams'
 cask 'microsoft-word'
 cask 'mqtt-explorer'
-# cask 'notion-calendar'
 cask 'opera'
 cask 'osxfuse'
 cask 'path-finder'
-# cask 'plex'
 cask 'postgres-unofficial'
 cask 'postico'
 cask 'postman'
@@ -96,11 +89,8 @@ cask 'synology-drive'
 cask 'synology-note-station-client'
 cask 'telegram'
 cask 'tower'
-# cask 'raycast'
-# cask 'warp'
 cask 'visual-studio-code'
 cask 'vlc'
 cask 'whatsapp'
 cask 'wifiman'
-# cask 'zed'
 cask 'zoom'
