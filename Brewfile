@@ -15,6 +15,7 @@ brew 'heroku'
 brew 'htop'
 brew 'imagemagick'
 brew 'jhead'
+brew 'mas'
 brew 'minio'
 # brew 'n' # -> use asdf
 # brew 'node'
@@ -67,7 +68,6 @@ cask 'istat-menus'
 cask 'iterm2'
 cask 'logi-options+'
 cask 'maczip'
-cask 'mas'
 cask 'microsoft-auto-update'
 cask 'microsoft-excel'
 cask 'microsoft-outlook'
@@ -94,3 +94,11 @@ cask 'vlc'
 cask 'whatsapp'
 cask 'wifiman'
 cask 'zoom'
+
+mas '1password for safari', id: 1569813296
+mas 'Awesome Screenshot & Recorder', id: 1531282066
+mas 'Disk Graph', id: 697942581
+mas 'iA Writer Classic', id: 439623248
+mas 'Mela – Recipe Manager', id: 1568924476
+mas 'MQTT Explorer', id: 1455214828
+mas 'Refined GitHub', id: 1519867270
