@@ -175,7 +175,7 @@ export DISABLE_UPDATE_PROMPT=true
 
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
-export RBENV_ROOT=/usr/local/var/rbenv
+export RBENV_ROOT=$(brew --prefix)/var/rbenv
 eval "$(rbenv init -)"
 
 . $(brew --prefix)/etc/profile.d/z.sh
