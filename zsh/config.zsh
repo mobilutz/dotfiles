@@ -42,25 +42,26 @@ bindkey '^?' backward-delete-char
 export DISABLE_UPDATE_PROMPT=true
 
 # rbenv Setup
-export RBENV_ROOT=/usr/local/var/rbenv
+export RBENV_ROOT=$(brew --prefix)/var/rbenv
 eval "$(rbenv init -)"
 
-. /usr/local/etc/profile.d/z.sh
+. $(brew --prefix)/etc/profile.d/z.sh
 
 # For GPG to work
 export GPG_TTY=$(tty)
 
 # brew install zsh-syntax-highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # heroku autocomplete setup
 HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
 # asdf https://asdf-vm.com/
-. /usr/local/opt/asdf/libexec/asdf.sh
-. ~/.asdf/plugins/dotnet/set-dotnet-env.zsh
+. $(brew --prefix)/opt/asdf/libexec/asdf.sh
+# No dotnet needed anymore
+# . ~/.asdf/plugins/dotnet/set-dotnet-env.zsh
 
 # 1Password GitHub Integration
 # https://developer.1password.com/docs/cli/shell-plugins/github/
-source ~/.config/op/plugins.sh
+# source ~/.config/op/plugins.sh
 
