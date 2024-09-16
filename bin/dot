@@ -44,14 +44,14 @@ export DOTZSH=$HOME/.dotfiles
 echo "› git pull"
 git -C $DOTZSH pull
 
-# Set macOS defaults
-$DOTZSH/macos/set-defaults.sh
-
 # Set macOS hostname
 $DOTZSH/macos/set-hostname.sh
 
 # Install homebrew
 $DOTZSH/homebrew/install.sh 2>&1
+
+# Set macOS defaults
+$DOTZSH/macos/set-defaults.sh
 
 # Upgrade homebrew
 echo "› brew update"
