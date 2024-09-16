@@ -31,3 +31,7 @@ vendor/bundle
 
 # Swap files
 *.swp
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
