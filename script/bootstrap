@@ -2,6 +2,18 @@
 #
 # bootstrap installs things.
 
+# TODO
+# - Alfred Settings Copy
+# - VS Code Settings Copy
+# - Rectangle Settings Copy
+# - macOS Settings Copy
+# - Transfer CleanMyMac License
+# - CleanMyMac Settings Copy
+# - iTerm2 Settings Copy
+# - SSH Config
+# - Email Git Signing
+# - 
+
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd -P)
 
@@ -137,11 +149,25 @@ install_dotfiles () {
   done
 }
 
+setup_vim () {
+  mkdir -p ~/.vim/pack/tpope/start
+  cd ~/.vim/pack/tpope/start
+  git clone https://tpope.io/vim/sensible.git
+}
+
+setup_oh_my_zsh () {
+  mkdir -p ~/.oh-my-zsh/custom/themes
+  mkdir -p ~/.oh-my-zsh/custom/plugins
+  custom_dir=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
+  [ -d $custom_dir/themes/powerlevel10k ] || git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+  [ -d $custom_dir/plugins/zsh-autosuggestions ] || git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+}
+
 setup_gitconfig
+setup_oh_my_zsh
+setup_vim
 install_dotfiles
 
-mkdir -p ~/.oh-my-zsh/custom/themes
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]

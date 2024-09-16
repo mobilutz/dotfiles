@@ -80,5 +80,5 @@ and I'd love to get it fixed for you!
 ## thanks
 
 I forked [Zack Holman](https://github.com/holman)' excellent
-[dotfiles](https://github.com/holamn/dotfiles) which are based on [Ryan Bates](https://github.com/ryanb)
+[dotfiles](https://github.com/holman/dotfiles) which are based on [Ryan Bates](https://github.com/ryanb)
 [dotfiles](https://github.com/ryanb/dotfiles)
