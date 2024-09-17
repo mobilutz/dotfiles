@@ -2,17 +2,29 @@
 #
 # bootstrap installs things.
 
-# TODO
-# - Alfred Settings Copy
-# - VS Code Settings Copy
+# Synology Drive
+# - Alfred Settings Copy -> Through Synology Drive
 # - Rectangle Settings Copy
-# - macOS Settings Copy
-# - Transfer CleanMyMac License
-# - CleanMyMac Settings Copy
 # - iTerm2 Settings Copy
 # - SSH Config
+
+# TODO
+# - VS Code Settings Copy
+# - Transfer CleanMyMac License
+# - CleanMyMac Settings Copy
 # - Email Git Signing
-# - 
+
+# davinci resolve -> Not possible
+
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+blue='\033[0;34m'
+magenta='\033[0;35m'
+cyan='\033[0;36m'
+# Clear the color after that
+clear='\033[0m'
+
 
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd -P)
@@ -22,21 +34,25 @@ set -e
 echo ''
 
 info () {
-  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+  printf "\r  [ ${blue}..${clear} ] ${1}\n"
 }
 
 user () {
-  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+  printf "\r  [ ${yellow}??${clear} ] ${1}\n"
 }
 
 success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+  printf "\r\033[2K  [ ${green}OK${clear} ] ${1}\n"
 }
 
 fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+  printf "\r\033[2K  [${red}FAIL${clear}] ${1}\n"
   echo ''
   exit
+}
+
+warn () {
+  printf "\r  [${magenta}WARN${clear}] ${1}\n"
 }
 
 setup_gitconfig () {
@@ -150,12 +166,16 @@ install_dotfiles () {
 }
 
 setup_vim () {
+  info 'setup vim config'
+
   mkdir -p ~/.vim/pack/tpope/start
   cd ~/.vim/pack/tpope/start
   git clone https://tpope.io/vim/sensible.git
 }
 
 setup_oh_my_zsh () {
+  info 'setup oh-my-zsh'
+
   mkdir -p ~/.oh-my-zsh/custom/themes
   mkdir -p ~/.oh-my-zsh/custom/plugins
   custom_dir=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
@@ -163,23 +183,23 @@ setup_oh_my_zsh () {
   [ -d $custom_dir/plugins/zsh-autosuggestions ] || git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
 
-setup_gitconfig
-setup_oh_my_zsh
-setup_vim
-install_dotfiles
+# setup_gitconfig
+# setup_oh_my_zsh
+# setup_vim
+# install_dotfiles
 
 
 # If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
-then
-  info "installing dependencies"
-  if source bin/dot | while read -r data; do info "$data"; done
-  then
-    success "dependencies installed"
-  else
-    fail "error installing dependencies"
-  fi
-fi
+# if [ "$(uname -s)" == "Darwin" ]
+# then
+#   info "installing dependencies"
+#   if source bin/dot | while read -r data; do info "$data"; done
+#   then
+#     success "dependencies installed"
+#   else
+#     fail "error installing dependencies"
+#   fi
+# fi
 
 echo ''
 echo '  All installed!'

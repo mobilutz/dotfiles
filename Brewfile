@@ -38,10 +38,6 @@ brew 'z'
 brew 'zsh-autosuggestions'
 brew 'zsh-syntax-highlighting'
 
-##### ToDo
-# disk-graph
-# davinci resolve -> Not possible
-
 cask '1password'
 cask '1password-cli'
 cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/Alfred Settings
