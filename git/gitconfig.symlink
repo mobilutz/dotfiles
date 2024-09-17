@@ -90,7 +90,7 @@
 				staash = stash --all
 
 				# Nicer branch output
-				bb = !~/.dotfiles/git/better-git-branch.sh
+				bb = !${DOTZSH}/git/better-git-branch.sh
 
 [apply]
 				# Detect whitespace errors when applying a patch.
