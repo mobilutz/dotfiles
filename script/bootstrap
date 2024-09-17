@@ -168,6 +168,10 @@ install_dotfiles () {
 setup_vim () {
   info 'setup vim config'
 
+  mkdir -p ~/.vim/backups
+  mkdir -p ~/.vim/swaps
+  mkdir -p ~/.vim/undo
+
   mkdir -p ~/.vim/pack/tpope/start
   cd ~/.vim/pack/tpope/start
   git clone https://tpope.io/vim/sensible.git
@@ -183,23 +187,23 @@ setup_oh_my_zsh () {
   [ -d $custom_dir/plugins/zsh-autosuggestions ] || git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
 
-# setup_gitconfig
-# setup_oh_my_zsh
-# setup_vim
-# install_dotfiles
+setup_gitconfig
+setup_oh_my_zsh
+setup_vim
+install_dotfiles
 
 
 # If we're on a Mac, let's install and setup homebrew.
-# if [ "$(uname -s)" == "Darwin" ]
-# then
-#   info "installing dependencies"
-#   if source bin/dot | while read -r data; do info "$data"; done
-#   then
-#     success "dependencies installed"
-#   else
-#     fail "error installing dependencies"
-#   fi
-# fi
+if [ "$(uname -s)" == "Darwin" ]
+then
+  info "installing dependencies"
+  if source bin/dot | while read -r data; do info "$data"; done
+  then
+    success "dependencies installed"
+  else
+    fail "error installing dependencies"
+  fi
+fi
 
 echo ''
 echo '  All installed!'
