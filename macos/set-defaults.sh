@@ -130,6 +130,22 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
 
 ###############################################################################
+# FireWall Settings                                                           #
+###############################################################################
+
+echo " Enable Firewall"
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw \
+  --setblockall off \
+  --setallowsigned on \
+  --setallowsignedapp on \
+  --setloggingmode on \
+  --setstealthmode on \
+  --setglobalstate on
+
+
+
+
+###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
 ###############################################################################
 
@@ -144,8 +160,8 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightC
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
 
-# Disable “natural” (Lion-style) scrolling
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+# Enable “natural” scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
 # Increase sound quality for Bluetooth headphones/headsets
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
@@ -203,7 +219,7 @@ sudo pmset -a autorestart 1
 sudo systemsetup -setrestartfreeze on
 
 # Sleep the display after 15 minutes
-sudo pmset -a displaysleep 15
+sudo pmset -a displaysleep 10
 
 # Disable machine sleep while charging
 sudo pmset -c sleep 0
