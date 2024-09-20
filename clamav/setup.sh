@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SUDO=/usr/bin/sudo
-BREW_DIR=$(brew --prefix)
+BREW_PREFIX=$(brew --prefix)
 
 # prerequisites
 # install macos command line tools
@@ -17,19 +17,19 @@ fi
 # simply brew with the install verb and clamav as the recipe to be brewed:
 brew install clamav
 
-# check and fix freshclam and clamd symlinks
-CLAMAV_PREFIX=$(clamav-config --prefix)
-test -f ${BREW_DIR}/bin/freshclam || ln -s "${CLAMAV_PREFIX}"/bin/freshclam ${BREW_DIR}/bin/freshclam
-test -f ${BREW_DIR}/bin/clamd || ln -s "${CLAMAV_PREFIX}"/sbin/clamd ${BREW_DIR}/bin/clamd
+CLAMAV_ETC_DIR=${BREW_PREFIX}/etc/clamav
 
 # create your configuration files
-#cp ${BREW_DIR}/etc/clamav/freshclam.conf.sample ${BREW_DIR}/etc/clamav/freshclam.conf && \
-#sed -ie 's/^Example/#Example/g' ${BREW_DIR}/etc/clamav/freshclam.conf
-#sed -ie 's/^LocalSocket /tmp/clamd.socket/#LocalSocket /tmp/clamd.socket/g' ${BREW_DIR}/etc/clamav/freshclam.conf
-#cp ${BREW_DIR}/etc/clamav/clamd.conf.sample ${BREW_DIR}/etc/clamav/clamd.conf && \
-#sed -ie 's/^Example/#Example/g' ${BREW_DIR}/etc/clamav/clamd.conf
-cp ./freshclam.conf ${BREW_DIR}/etc/clamav/freshclam.conf
-cp ./clamd.conf ${BREW_DIR}/etc/clamav/clamd.conf
+FRESHCLAM_CONF=${CLAMAV_ETC_DIR}/freshclam.conf
+cp ${CLAMAV_ETC_DIR}/freshclam.conf.sample ${FRESHCLAM_CONF}
+sed -ie 's/^Example/#Example/g' ${FRESHCLAM_CONF}
+sed -ie 's/^#LogTime yes/LogTime yes/g' ${FRESHCLAM_CONF}
+sed -ie "s|^#NotifyClamd /path/to/clamd.conf|NotifyClamd ${CLAMAV_ETC_DIR}/clamd.conf|g" ${FRESHCLAM_CONF}
+
+CLAMD_CONF=${CLAMAV_ETC_DIR}/clamd.conf
+cp ${CLAMAV_ETC_DIR}/clamd.conf.sample ${CLAMD_CONF}
+sed -ie 's/^Example/#Example/g' ${CLAMD_CONF}
+sed -ie 's/^#LogTime yes/LogTime yes/g' ${CLAMD_CONF}
 
 # update the virus definitions for clamav
 freshclam -v

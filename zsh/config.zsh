@@ -41,23 +41,24 @@ bindkey '^?' backward-delete-char
 # Automatic OhMyZSH Update
 export DISABLE_UPDATE_PROMPT=true
 
+BREW_PREFIX=$(brew --prefix)
 # rbenv Setup
-export RBENV_ROOT=$(brew --prefix)/var/rbenv
+export RBENV_ROOT=${BREW_PREFIX}/var/rbenv
 eval "$(rbenv init -)"
 
-. $(brew --prefix)/etc/profile.d/z.sh
+. ${BREW_PREFIX}/etc/profile.d/z.sh
 
 # For GPG to work
 export GPG_TTY=$(tty)
 
 # brew install zsh-syntax-highlighting
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # heroku autocomplete setup
 HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
 # asdf https://asdf-vm.com/
-. $(brew --prefix)/opt/asdf/libexec/asdf.sh
+. ${BREW_PREFIX}/opt/asdf/libexec/asdf.sh
 # No dotnet needed anymore
 # . ~/.asdf/plugins/dotnet/set-dotnet-env.zsh
 
