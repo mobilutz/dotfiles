@@ -9,13 +9,13 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/ll/.oh-my-zsh"
+export ZSH=${HOME}/.oh-my-zsh
 
 # shortcut to this dotfiles path is $DOTZSH
 export DOTZSH=$HOME/.dotfiles
 
 # your project folder that we can `c [tab]` to
-export PROJECTS=~/Code
+export PROJECTS=~/code
 
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
@@ -151,9 +151,10 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-export EDITOR="$(brew --prefix)/bin/code -w"
-export BUNLDER_EDITOR="$(brew --prefix)/bin/code -w"
-export GEM_OPEN_EDITOR="$(brew --prefix)/bin/code -w"
+BREW_PREFIX=$(brew --prefix)
+export EDITOR="${BREW_PREFIX}/bin/code -w"
+export BUNLDER_EDITOR="${BREW_PREFIX}/bin/code -w"
+export GEM_OPEN_EDITOR="${BREW_PREFIX}/bin/code -w"
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -173,9 +174,8 @@ function ssh-add_wf() {
 export DISABLE_UPDATE_PROMPT=true
 
 
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
-. $(brew --prefix)/etc/profile.d/z.sh
+. ${BREW_PREFIX}/etc/profile.d/z.sh
 
 
 # set the file open limit higher
@@ -183,20 +183,20 @@ ulimit -n 4096
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export PATH="$(brew --prefix)/sbin:$PATH"
 
 # For GPG to work
 export GPG_TTY=$(tty)
 
 # brew install zsh-syntax-highlighting
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # heroku autocomplete setup
 HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
 # rbenv install fails because of zlib
 # https://github.com/rbenv/ruby-build/issues/832#issuecomment-160906530
-RUBY_CONFIGURE_OPTS=--with-zlib-dir="$(brew --prefix zlib)"
+# export RUBY_CONFIGURE_OPTS=--with-zlib-dir="$(brew --prefix zlib)"
+# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 # Github PAT from MobiLutz
 export GITHUB_TOKEN=____REPLACE_WITH_GITHUB_PAT____
@@ -206,15 +206,15 @@ export BUNDLE_GITHUB__COM=x-access-token:${GITHUB_TOKEN}
 export NODE_AUTH_TOKEN=${parts[2]}
 
 # # Google Cloud SDK
-# source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-# source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+# source "${BREW_PREFIX}/share/google-cloud-sdk/path.zsh.inc"
+# source "${BREW_PREFIX}/share/google-cloud-sdk/completion.zsh.inc"
 
 # Compose bins
-export PATH="$PATH:$HOME/.composer/vendor/bin"
+# export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 # Fix for puma
 # https://github.com/darkskyapp/forecast-ruby/issues/13#issuecomment-432464692
-export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+# export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
 # Enable helm OCI support (experimental) https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-gke#local-shell
 export HELM_EXPERIMENTAL_OCI=1

@@ -154,6 +154,10 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
+# Trackpad and Mouse Speed
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float "2"
+defaults write NSGlobalDomain com.apple.mouse.scaling -float "3"
+
 # Trackpad: map bottom right corner to right-click
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
