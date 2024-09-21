@@ -41,7 +41,8 @@ bindkey '^?' backward-delete-char
 # Automatic OhMyZSH Update
 export DISABLE_UPDATE_PROMPT=true
 
-BREW_PREFIX=$(brew --prefix)
+# BREW_PREFIX=$(brew --prefix)
+BREW_PREFIX=/opt/homebrew
 # rbenv Setup
 export RBENV_ROOT=${BREW_PREFIX}/var/rbenv
 eval "$(rbenv init -)"
