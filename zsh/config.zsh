@@ -58,11 +58,6 @@ source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # heroku autocomplete setup
 HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
-# asdf https://asdf-vm.com/
-. ${BREW_PREFIX}/opt/asdf/libexec/asdf.sh
-# No dotnet needed anymore
-# . ~/.asdf/plugins/dotnet/set-dotnet-env.zsh
-
 # 1Password GitHub Integration
 # https://developer.1password.com/docs/cli/shell-plugins/github/
 # source ~/.config/op/plugins.sh
