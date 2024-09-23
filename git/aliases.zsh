@@ -14,11 +14,16 @@ alias gp='git push origin HEAD'
 # Remove `+` and `-` from start of diff lines; just rely upon color.
 alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
 
+alias gac='git add -A && git commit -m'
+alias gb='git branch'
 alias gc='git commit'
 alias gca='git commit -a'
-alias gco='git checkout'
 alias gcb='git copy-branch-name'
-alias gb='git branch'
-alias gst='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
-alias gac='git add -A && git commit -m'
+alias gcm='git commit --all --message'
+alias gcm='git commit --no-verify -m'
+alias gco='git checkout'
 alias ge='git-edit-new'
+alias gst='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
+alias gll='git status -sb'
+
+alias addnw=!sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'

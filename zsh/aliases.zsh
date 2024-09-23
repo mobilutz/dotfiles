@@ -47,10 +47,7 @@ alias dcrdm='dcbe rails db:migrate:with_data db:test:prepare'
 alias et='code'
 alias c='code'
 
-alias gst='git status -sb'
-alias addnw=!sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
 alias homebrew='brew'
-alias gcm='git commit --no-verify -m'
 
 alias listen="sudo lsof -i -P | grep -i \"listen\""
 

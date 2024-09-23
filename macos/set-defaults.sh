@@ -815,7 +815,7 @@ defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
 defaults write com.apple.DiskUtility advanced-image-options -bool true
 
 # Auto-play videos when opened with QuickTime Player
-defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
+# defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
 
 
 
