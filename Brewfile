@@ -27,7 +27,7 @@ brew 'mise'
 brew 'oci-cli'
 brew 'php'
 brew 'puma/puma/puma-dev'
-brew 'rbenv'
+# brew 'rbenv' # -> use mise
 brew 'shpotify'
 brew 'spaceman-diff'
 brew 'spicetify-cli'
