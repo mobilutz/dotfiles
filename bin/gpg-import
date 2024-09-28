@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Import a single gpg key
+
+set -e
+
+key_name=$1
+
+if [ -z ${key_name} ]; then
+  echo "Please provide a key name where a corresponding *-PRIVATE.pgp file is in the HOME directory"
+  exit 1
+fi
+
+gpg --import ~/${key_name}-PRIVATE.pgp
+
+echo "\n\n"
+echo "---------------------------------------------------------------"
+echo "GPG key was imported, now the trust level needs to be adjusted."
+echo "Select trust level, save, and then type 'quit'"
+echo "---------------------------------------------------------------"
+echo "\n\n"
+
+gpg --edit-key ${key_name} trust

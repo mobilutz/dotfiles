@@ -33,17 +33,6 @@ alias be='bundle exec'
 alias bi='bundle install'
 alias bu='bundle update'
 
-alias dce='docker-compose exec app'
-alias dcup='docker-compose up -d'
-alias dcdown='docker-compose down'
-alias dcbe='dce bundle exec'
-alias dcstart='docker-compose start'
-alias dcstop='docker-compose stop'
-alias dcbi='dce bundle install'
-alias dcrc='dcbe rails c'
-alias dcbuild='docker-compose build'
-alias dcrdm='dcbe rails db:migrate:with_data db:test:prepare'
-
 alias et='code'
 alias c='code'
 

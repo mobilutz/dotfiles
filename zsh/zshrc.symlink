@@ -25,34 +25,6 @@ then
   source ~/.localrc
 fi
 
-# all of our zsh files
-typeset -U config_files
-config_files=($DOTZSH/**/*.zsh)
-
-# load the path files
-for file in ${(M)config_files:#*/path.zsh}
-do
-  source $file
-done
-
-# load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-do
-  source $file
-done
-
-# initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit
-
-# load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}
-do
-  source $file
-done
-
-unset config_files
-
 # Better history
 # Credits to https://coderwall.com/p/jpj_6q/zsh-better-history-searching-with-arrow-keys
 autoload -U up-line-or-beginning-search
@@ -130,7 +102,7 @@ zstyle :omz:plugins:ssh-agent ssh-add-args -q
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ssh-agent brew heroku vscode ruby yarn zsh-autosuggestions z)
+plugins=(brew git heroku ruby ssh-agent vscode yarn z zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -173,6 +145,33 @@ function ssh-add_wf() {
 # Automatic OhMyZSH Update
 export DISABLE_UPDATE_PROMPT=true
 
+# all of our zsh files
+typeset -U config_files
+config_files=($DOTZSH/**/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+  source $file
+done
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+autoload -U compinit
+compinit
+
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
 
 
 . ${BREW_PREFIX}/etc/profile.d/z.sh
@@ -201,8 +200,7 @@ HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup 
 # mise Version manager
 eval "$(mise activate zsh)"
 
-# Github PAT from MobiLutz
-export GITHUB_TOKEN=____REPLACE_WITH_GITHUB_PAT____
+source ~/.zshrc.local
 
 export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=${GITHUB_TOKEN}:x-oauth-basic
 export BUNDLE_GITHUB__COM=x-access-token:${GITHUB_TOKEN}
