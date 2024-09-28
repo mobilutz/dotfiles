@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Export a single gpg key
+
+set -e
+
+key_name=$1
+
+if [ -z ${key_name} ]; then
+  echo "Please provide a key name"
+  gpg --list-keys --with-colons | awk -F: '$1 == "uid" && ($2 == "u" || $2 == "r") { print $10 }' | awk -vRS=">" -vFS="<" '{print $2}'
+  exit 1
+fi
+
+# gpg --output "${key_name}-public.pgp" --armor --export ${key_name}
+gpg --output "${key_name}-PRIVATE.pgp" --armor --export-secret-key ${key_name}
