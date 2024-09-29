@@ -26,6 +26,7 @@ brew 'mise'
 # brew 'node'
 brew 'oci-cli'
 brew 'php'
+brew 'postgresql'
 brew 'puma/puma/puma-dev'
 # brew 'rbenv' # -> use mise
 brew 'shpotify'
