@@ -192,11 +192,6 @@ source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # heroku autocomplete setup
 HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
-# rbenv install fails because of zlib
-# https://github.com/rbenv/ruby-build/issues/832#issuecomment-160906530
-# export RUBY_CONFIGURE_OPTS=--with-zlib-dir="$(brew --prefix zlib)"
-# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
-
 # mise Version manager
 eval "$(mise activate zsh)"
 

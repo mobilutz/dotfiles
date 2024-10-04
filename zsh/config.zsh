@@ -43,9 +43,6 @@ export DISABLE_UPDATE_PROMPT=true
 
 # BREW_PREFIX=$(brew --prefix)
 BREW_PREFIX=/opt/homebrew
-# rbenv Setup
-export RBENV_ROOT=${BREW_PREFIX}/var/rbenv
-eval "$(rbenv init -)"
 
 . ${BREW_PREFIX}/etc/profile.d/z.sh
 
