@@ -1,20 +1,23 @@
 cask_args appdir: '/Applications'
 
+tap 'buo/cask-upgrade'
 tap 'github/gh'
 tap 'heroku/brew'
 tap 'homebrew/bundle'
+tap 'null-dev/firefox-profile-switcher'
 
 # brew 'act' # GitHub Actions locally
 brew 'awscli'
 brew 'bat'
 brew 'clamav'
 brew 'coreutils'
+# brew 'docker' # Docker cask is enough!!!
 brew 'esptool'
 brew 'eza'
-# brew 'docker' # Docker cask is enough!!!
 brew 'gh'
 brew 'git-secrets'
 brew 'heroku'
+brew 'hugo'
 brew 'htop'
 brew 'imagemagick'
 brew 'jhead'
@@ -23,10 +26,11 @@ brew 'mas'
 brew 'minio'
 brew 'mise'
 # brew 'n' # -> use mise
-# brew 'node'
+# brew 'node' # -> use mise
+brew 'null-dev/firefox-profile-switcher/firefox-profile-switcher-connector'
 brew 'oci-cli'
 brew 'php'
-brew 'postgresql'
+brew 'postgresql' # needed for ruby pg gem install
 brew 'puma/puma/puma-dev'
 # brew 'rbenv' # -> use mise
 brew 'shpotify'
@@ -42,11 +46,10 @@ brew 'zsh-syntax-highlighting'
 
 cask '1password'
 cask '1password-cli'
-cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/Alfred Settings
+cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/MacSettings/AlfredApp
 cask 'ao' # Microsoft To-Do
 cask 'anydesk'
 cask 'betterdisplay'
-cask 'bettermouse' # https://better-mouse.com/
 cask 'brave-browser'
 cask 'cakebrew'
 cask 'chatall'
@@ -66,7 +69,7 @@ cask 'exifrenamer'
 cask 'filemon'
 cask 'firefox'
 cask 'flux' # Screen color temperatur controller
-cask 'fmail'
+cask 'fmail2'
 cask 'font-meslo-lg-nerd-font'
 # cask 'franz' # Using whatsapp cask directly
 cask 'fujitsu-scansnap-home'
@@ -76,6 +79,8 @@ cask 'hiddenbar'
 cask 'istat-menus'
 cask 'iterm2'
 cask 'logi-options+'
+cask 'logitune'
+cask 'macmediakeyforwarder' # Music button on keyboard handling
 cask 'maczip'
 cask 'microsoft-auto-update'
 cask 'microsoft-excel'
