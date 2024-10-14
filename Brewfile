@@ -87,6 +87,7 @@ cask 'microsoft-excel'
 cask 'microsoft-outlook'
 cask 'microsoft-teams'
 cask 'microsoft-word'
+cask 'mongodb-compass'
 cask 'mqtt-explorer'
 cask 'opera'
 # cask 'osxfuse' # Does not work with macOS >= 14
