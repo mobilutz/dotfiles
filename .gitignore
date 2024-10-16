@@ -1,4 +1,4 @@
-git/gitconfig.local.symlink
+git/gitconfig.local.*
 Brewfile.lock.json
 dotfiles.initialized
 zsh/zshrc.local.symlink
