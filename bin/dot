@@ -76,7 +76,7 @@ echo "› brew upgrade"
 brew upgrade
 
 echo "› brew bundle"
-brew bundle --file ${}
+brew bundle # --file ${}
 
 if [ ${freshInstall} = 'true' ]; then
 	# Install software

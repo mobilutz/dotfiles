@@ -1,4 +1,5 @@
 alias d-c='docker compose $*'
+alias dc='docker compose $*'
 alias d='docker $*'
 alias dcbe='dce bundle exec'
 alias dcbi='dce bundle install'
