@@ -29,6 +29,7 @@ brew 'mise'
 # brew 'node' # -> use mise
 brew 'null-dev/firefox-profile-switcher/firefox-profile-switcher-connector'
 brew 'oci-cli'
+brew 'openshift-cli' # OpenShift https://www.openshift.com/ - k8s management
 brew 'php'
 brew 'postgresql' # needed for ruby pg gem install
 brew 'puma/puma/puma-dev'
