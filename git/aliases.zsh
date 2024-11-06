@@ -22,6 +22,7 @@ alias gcb='git copy-branch-name'
 # alias gcm='git commit --all --message'
 alias gcm='git commit --no-verify -m'
 alias gco='git checkout'
+alias gcom='git checkout master'
 alias ge='git-edit-new'
 alias gst='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
 alias gll='git status -sb'
