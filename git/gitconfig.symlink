@@ -73,7 +73,7 @@
 
   # Remove branches that have already been merged with main.
   # a.k.a. ‘delete merged’
-  dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+  dm = "delete-local-merged"
 
   # List contributors with number of commits.
   contributors = shortlog --summary --numbered
@@ -91,6 +91,9 @@
 
   # Nicer branch output
   bb = !${DOTZSH}/git/better-git-branch.sh
+
+  # Checkout master branch
+  com = checkout master
 
 [apply]
   # Detect whitespace errors when applying a patch.
