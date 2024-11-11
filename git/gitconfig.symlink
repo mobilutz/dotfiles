@@ -95,6 +95,12 @@
   # Checkout master branch
   com = checkout master
 
+  # Rebase origin/master
+  rom = rebase origin/master
+
+  # Rebase continue
+  rc = rebase --continue
+
 [apply]
   # Detect whitespace errors when applying a patch.
   whitespace = fix
