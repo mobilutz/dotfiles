@@ -53,7 +53,7 @@ cask 'anydesk'
 cask 'betterdisplay'
 cask 'brave-browser'
 cask 'cakebrew'
-cask 'chatall'
+# cask 'chatall' # Is not working
 cask 'cheatsheet'
 cask 'cisdem-duplicate-finder'
 cask 'cleanmymac'
