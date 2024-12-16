@@ -83,6 +83,7 @@ cask 'logi-options+'
 cask 'logitune'
 cask 'macmediakeyforwarder' # Music button on keyboard handling
 cask 'maczip'
+cask 'michaelvillar-timer'
 cask 'microsoft-auto-update'
 cask 'microsoft-excel'
 cask 'microsoft-outlook'
