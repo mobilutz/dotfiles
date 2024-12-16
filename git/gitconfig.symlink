@@ -53,6 +53,9 @@
   # PushWithLease - https://git-scm.com/docs/git-push#Documentation/git-push.txt---no-force-with-lease
   pushfl = push --force-with-lease
 
+  # Force Push
+  pf = push --force
+
   # Interactive rebase with the given number of latest commits.
   reb = "!r() { git rebase -i HEAD~$1; }; r"
 
