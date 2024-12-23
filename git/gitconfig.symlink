@@ -56,6 +56,9 @@
   # Force Push
   pf = push --force
 
+  # UnVerify Push
+  pnv = push --no-verify
+
   # Interactive rebase with the given number of latest commits.
   reb = "!r() { git rebase -i HEAD~$1; }; r"
 
