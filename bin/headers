@@ -1,5 +1,8 @@
 #!/bin/sh
 #
+# Show response headers from a URL.
+# Usage: headers www.google.com
+#
 # https://github.com/rtomayko/dotfiles/blob/rtomayko/.local/bin/headers
 
 curl -sv "$@" 2>&1 >/dev/null |
