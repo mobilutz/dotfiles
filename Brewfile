@@ -16,14 +16,18 @@ brew 'esptool'
 brew 'eza'
 brew 'gh'
 brew 'git-secrets'
+brew 'helm'
 brew 'heroku'
 brew 'hugo'
 brew 'htop'
 brew 'imagemagick'
 brew 'jhead'
 brew 'jq'
+brew 'kind'
+brew 'kubeconform'
 brew 'mas'
 brew 'minio'
+# brew 'minikube'
 brew 'mise'
 # brew 'n' # -> use mise
 # brew 'node' # -> use mise
@@ -121,5 +125,8 @@ mas 'Awesome Screenshot & Recorder', id: 1531282066
 mas 'Disk Graph', id: 697942581
 mas 'iA Writer Classic', id: 439623248
 mas 'Mela – Recipe Manager', id: 1568924476
+mas 'Microsoft To Do', id: 1212616790
 mas 'MQTT Explorer', id: 1455214828
+mas 'Pixelmator Classic', id: 407963104
 mas 'Refined GitHub', id: 1519867270
+mas 'Vinegar - Tube Cleaner', id: 1591303229
