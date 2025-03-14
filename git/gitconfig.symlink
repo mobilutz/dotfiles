@@ -3,252 +3,253 @@
 	path = ~/.gitconfig.local
 
 [alias]
-  promote = !$DOTZSH/bin/git-promote
-  wtf     = !$DOTZSH/bin/git-wtf
-  rank-contributors = !$DOTZSH/bin/git-rank-contributors
-  count   = !git shortlog -sn
+	promote = !$DOTZSH/bin/git-promote
+	wtf     = !$DOTZSH/bin/git-wtf
+	rank-contributors = !$DOTZSH/bin/git-rank-contributors
+	count   = !git shortlog -sn
 
-  # View abbreviated SHA, description, and history graph of the latest 20 commits.
-  l = log --pretty=oneline -n 20 --graph --abbrev-commit
+	# View abbreviated SHA, description, and history graph of the latest 20 commits.
+	l = log --pretty=oneline -n 20 --graph --abbrev-commit
 
-  # View the current working tree status using the short format.
-  s = status -s
-  st = status -s
+	# View the current working tree status using the short format.
+	s = status -s
+	st = status -s
 
-  # Show the diff between the latest commit and the current state.
-  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+	# Show the diff between the latest commit and the current state.
+	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
-  # `git di $number` shows the diff between the state `$number` revisions ago and the current state.
-  di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+	# `git di $number` shows the diff between the state `$number` revisions ago and the current state.
+	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
-  # Pull in remote changes for the current repository and all its submodules.
-  p = pull --recurse-submodules
+	# Pull in remote changes for the current repository and all its submodules.
+	p = pull --recurse-submodules
 
-  # Clone a repository including all submodules.
-  c = clone --recursive
+	# Clone a repository including all submodules.
+	c = clone --recursive
 
-  # Checkout
-  co = checkout
+	# Checkout
+	co = checkout
 
-  # Commit all changes.
-  ca = !git add -A && git commit -av
+	# Commit all changes.
+	ca = !git add -A && git commit -av
 
-  # Switch to a branch, creating it if necessary.
-  go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+	# Switch to a branch, creating it if necessary.
+	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
 
-  # Show verbose output about tags, branches or remotes
-  tags = tag -l
-  branches = branch --all
-  remotes = remote --verbose
+	# Show verbose output about tags, branches or remotes
+	tags = tag -l
+	branches = branch --all
+	remotes = remote --verbose
 
-  # List aliases.
-  aliases = config --get-regexp alias
+	# List aliases.
+	aliases = config --get-regexp alias
 
-  # Amend the currently staged files to the latest commit.
-  amend = commit --amend --reuse-message=HEAD
+	# Amend the currently staged files to the latest commit.
+	amend = commit --amend --reuse-message=HEAD
 
-  # Credit an author on the latest commit.
-  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+	# Credit an author on the latest commit.
+	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
-  # PushWithLease - https://git-scm.com/docs/git-push#Documentation/git-push.txt---no-force-with-lease
-  pushfl = push --force-with-lease
+	# PushWithLease - https://git-scm.com/docs/git-push#Documentation/git-push.txt---no-force-with-lease
+	pushfl = push --force-with-lease
 
-  # Force Push
-  pf = push --force
+	# Force Push
+	pf = push --force
 
-  # UnVerify Push
-  pnv = push --no-verify
+	# UnVerify Push
+	pnv = push --no-verify
 
-  # Interactive rebase with the given number of latest commits.
-  reb = "!r() { git rebase -i HEAD~$1; }; r"
+	# Interactive rebase with the given number of latest commits.
+	reb = "!r() { git rebase -i HEAD~$1; }; r"
 
-  # Remove the old tag with this name and tag the latest commit with it.
-  retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
+	# Remove the old tag with this name and tag the latest commit with it.
+	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
 
-  # Find branches containing commit
-  fb = "!f() { git branch -a --contains $1; }; f"
+	# Find branches containing commit
+	fb = "!f() { git branch -a --contains $1; }; f"
 
-  # Find tags containing commit
-  ft = "!f() { git describe --always --contains $1; }; f"
+	# Find tags containing commit
+	ft = "!f() { git describe --always --contains $1; }; f"
 
-  # Find commits by source code
-  fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+	# Find commits by source code
+	fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
 
-  # Find commits by commit message
-  fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+	# Find commits by commit message
+	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-  # Remove branches that have already been merged with main.
-  # a.k.a. ‘delete merged’
-  dm = "delete-local-merged"
+	# Remove branches that have already been merged with main.
+	# a.k.a. ‘delete merged’
+	dm = "delete-local-merged"
 
-  # List contributors with number of commits.
-  contributors = shortlog --summary --numbered
+	# List contributors with number of commits.
+	contributors = shortlog --summary --numbered
 
-  # Show the user email for the current repository.
-  whoami = config user.email
-  oblame = 'blame -w -C -C -C'
-  praise = blame
+	# Show the user email for the current repository.
+	whoami = config user.email
+	oblame = 'blame -w -C -C -C'
+	praise = blame
 
-  # Get commit on date
-  commitsAtDate = "!f() { git log --pretty='format:%C(yellow)%h %G? %ad%Cred%d %Creset%s%C(cyan) [%cn]' --decorate --after=\"$1 0:00\" --before=\"$1 23:59\"; }; f"
+	# Get commit on date
+	commitsAtDate = "!f() { git log --pretty='format:%C(yellow)%h %G? %ad%Cred%d %Creset%s%C(cyan) [%cn]' --decorate --after=\"$1 0:00\" --before=\"$1 23:59\"; }; f"
 
-  # Stash all
-  staash = stash --all
+	# Stash all
+	staash = stash --all
 
-  # Nicer branch output
-  bb = !${DOTZSH}/git/better-git-branch.sh
+	# Nicer branch output
+	bb = !${DOTZSH}/git/better-git-branch.sh
 
-  # Checkout master branch
-  com = checkout master
+	# Checkout master branch
+	com = checkout master
 
-  # Rebase origin/master
-  rom = rebase origin/master
+	# Rebase origin/master
+	rom = rebase origin/master
 
-  # Rebase continue
-  rc = rebase --continue
+	# Rebase continue
+	rc = rebase --continue
 
-  # Rename a branch
-  rename = branch -m
+	# Rename a branch
+	rename = branch -m
 
 [apply]
-  # Detect whitespace errors when applying a patch.
-  whitespace = fix
+	# Detect whitespace errors when applying a patch.
+	whitespace = fix
 
 [branch]
-  # Show most recently changed branches first.
-  sort = -committerdate
-  autosetupmerge = always
+	# Show most recently changed branches first.
+	sort = -committerdate
+	autosetupmerge = always
 
 [color]
-  # Use colors in Git commands that are capable of colored output when
-  # outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
-  ui = auto
+	# Use colors in Git commands that are capable of colored output when
+	# outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
+	ui = auto
 
 [color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
+	current = yellow reverse
+	local = yellow
+	remote = green
 
 [color "diff"]
-  meta = yellow bold
-  frag = magenta bold # line info
-  old = red # deletions
-  new = green # additions
+	meta = yellow bold
+	frag = magenta bold # line info
+	old = red # deletions
+	new = green # additions
 
 [color "status"]
-  added = yellow
-  changed = green
-  untracked = cyan
+	added = yellow
+	changed = green
+	untracked = cyan
 
 [column]
-  ui = auto
+	ui = auto
 
 [commit]
-  # https://help.github.com/articles/signing-commits-using-gpg/
-  gpgsign = true
+	# https://help.github.com/articles/signing-commits-using-gpg/
+	gpgsign = true
+	template = /Users/ll/.stCommitMsg
 
 [color]
-  diff = auto
-  status = auto
-  branch = auto
-  ui = true
+	diff = auto
+	status = auto
+	branch = auto
+	ui = true
 
 [core]
-  # Use custom `.gitignore` and `.gitattributes`.
-  attributesfile = ~/.gitattributes
+	# Use custom `.gitignore` and `.gitattributes`.
+	attributesfile = ~/.gitattributes
 
-  # Treat spaces before tabs and all kinds of trailing whitespace as an error.
-  # [default] trailing-space: looks for spaces at the end of a line
-  # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
-  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+	# Treat spaces before tabs and all kinds of trailing whitespace as an error.
+	# [default] trailing-space: looks for spaces at the end of a line
+	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 
-  # Make `git rebase` safer on macOS.
-  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-  trustctime = false
+	# Make `git rebase` safer on macOS.
+	# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+	trustctime = false
 
-  # Prevent showing files whose names contain non-ASCII symbols as unversioned.
-  # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
-  precomposeunicode = false
+	# Prevent showing files whose names contain non-ASCII symbols as unversioned.
+	# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+	precomposeunicode = false
 
-  # Speed up commands involving untracked files such as `git status`.
-  # https://git-scm.com/docs/git-update-index#_untracked_cache
-  untrackedCache = true
+	# Speed up commands involving untracked files such as `git status`.
+	# https://git-scm.com/docs/git-update-index#_untracked_cache
+	untrackedCache = true
 
 # Use vscode as editor
-  editor = code --wait
-  excludesfile = ~/.gitignore
+	editor = code --wait
+	excludesfile = /Users/ll/.gitignore
 
 [credential]
-  helper = osxkeychain
+	helper = osxkeychain
 
 [diff]
-  # Detect copies as well as renames.
-  renames = copies
+	# Detect copies as well as renames.
+	renames = copies
 
 [diff "bin"]
-  # Use `hexdump` to diff binary files.
-  textconv = hexdump -v -C
+	# Use `hexdump` to diff binary files.
+	textconv = hexdump -v -C
 
 [diff "spaceman-diff"]
-  command = /opt/homebrew/bin/spaceman-diff
+	command = /opt/homebrew/bin/spaceman-diff
 
 [difftool]
-  prompt = false
+	prompt = false
 
 [gpg]
-  program = /usr/local/bin/gpg
+	program = /usr/local/bin/gpg
 	format = openpgp
 
 [help]
-  autocorrect = 1
+	autocorrect = 1
 
 [hub]
-  protocol = https
-
-[includeIf "gitdir:~/MileCrew/"]
-  path = ~/MileCrew/.gitconfig
-
-[includeIf "gitdir:~/TomorrowLabs/"]
-  path = ~/TomorrowLabs/.gitconfig
+	protocol = https
 
 [init]
-  defaultBranch = main
+	defaultBranch = main
 
 [merge]
-  # Include summaries of merged commits in newly created merge commit messages
-  log = true
+	# Include summaries of merged commits in newly created merge commit messages
+	log = true
 
 [mergetool]
-  keepBackup = false
+	keepBackup = false
 
 [pull]
-  rebase = false
+	rebase = false
 
 [push]
-  # See `git help config` (search for push.default)
-  # for more information on different options of the below setting.
-  # https://git-scm.com/docs/git-config#git-config-pushdefault
-  default = current
+	# See `git help config` (search for push.default)
+	# for more information on different options of the below setting.
+	# https://git-scm.com/docs/git-config#git-config-pushdefault
+	default = current
 
-  # Make `git push` push relevant annotated tags when pushing branches out.
-  followTags = true
+	# Make `git push` push relevant annotated tags when pushing branches out.
+	followTags = true
 
 [rerere]
-  enabled = true
+	enabled = true
 
 # URL shorthands
 [url "git@github.com:"]
-  insteadOf = "gh:"
-  pushInsteadOf = "github:"
-  pushInsteadOf = "git://github.com/"
+	insteadOf = "gh:"
+	pushInsteadOf = "github:"
+	pushInsteadOf = "git://github.com/"
 
 [url "git://github.com/"]
-  insteadOf = "github:"
+	insteadOf = "github:"
 
 [url "git@gist.github.com:"]
-  insteadOf = "gst:"
-  pushInsteadOf = "gist:"
-  pushInsteadOf = "git://gist.github.com/"
+	insteadOf = "gst:"
+	pushInsteadOf = "gist:"
+	pushInsteadOf = "git://gist.github.com/"
 
 [url "git://gist.github.com/"]
-  insteadOf = "gist:"
+	insteadOf = "gist:"
+[difftool "sourcetree"]
+	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --nosplash \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+	trustExitCode = true
