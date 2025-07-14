@@ -42,7 +42,7 @@ alias listen="sudo lsof -i -P | grep -i \"listen\""
 
 alias convert_heic='for f in *.[hH][eE][iI][cC]; do sips -s format jpeg "${f}" --out "${f%.*}.jpg"; rm "${f}"; done'
 alias exif_rename='for f in *.[jJ][pP]*[gG]; do jhead -n%Y-%m-%d_%H-%M-%S "${f}"; done'
-alias mov_rename='for f in IMG_*.[mM][oOp][vV4]; do new_f="${f:4:4}-${f:8:2}-${f:10:2}_${f:13:2}-${f:15:2}-${f:17:2}.${f/*./}"; echo "\tRenaming $f  ->  ${new_f}"; mv $f $new_f; done'
+alias mov_rename='for f in IMG_*.[mM][oOpP][vV4]; do new_f="${f:4:4}-${f:8:2}-${f:10:2}_${f:13:2}-${f:15:2}-${f:17:2}.${f/*./}"; echo "\tRenaming $f  ->  ${new_f}"; mv $f $new_f; done'
 alias convert_images='convert_heic; exif_rename; mov_rename'
 
 function dockersize() {
