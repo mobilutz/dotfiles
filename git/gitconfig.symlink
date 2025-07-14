@@ -52,6 +52,7 @@
 
 	# PushWithLease - https://git-scm.com/docs/git-push#Documentation/git-push.txt---no-force-with-lease
 	pushfl = push --force-with-lease
+	pfl = push --force-with-lease
 
 	# Force Push
 	pf = push --force
@@ -231,6 +232,9 @@
 [rerere]
 	enabled = true
 
+[stash]
+  includeUntracked = true
+
 # URL shorthands
 [url "git@github.com:"]
 	insteadOf = "gh:"
@@ -247,9 +251,11 @@
 
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
+
 [difftool "sourcetree"]
 	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --nosplash \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
+
 [mergetool "sourcetree"]
 	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
 	trustExitCode = true
