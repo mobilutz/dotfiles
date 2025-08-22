@@ -57,6 +57,9 @@
 	# Force Push
 	pf = push --force
 
+	# push -u origin
+	po = push -u origin
+
 	# UnVerify Push
 	pnv = push --no-verify
 

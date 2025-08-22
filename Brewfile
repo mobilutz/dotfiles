@@ -103,6 +103,7 @@ cask 'path-finder'
 cask 'postgres-unofficial'
 cask 'postico'
 cask 'postman'
+cask 'proxy-audio-device' # This helps to make output volume controllable even when the device does not allow it
 cask 'rapidapi'
 cask 'raspberry-pi-imager'
 cask 'rectangle'
@@ -132,3 +133,4 @@ mas 'MQTT Explorer', id: 1455214828
 mas 'Pixelmator Classic', id: 407963104
 mas 'Refined GitHub', id: 1519867270
 mas 'Vinegar - Tube Cleaner', id: 1591303229
+mas 'Xcode', id: 497799835
