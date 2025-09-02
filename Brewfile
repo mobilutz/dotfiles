@@ -74,7 +74,7 @@ cask 'exifrenamer'
 cask 'filemon'
 cask 'firefox'
 cask 'flux' # Screen color temperatur controller
-cask 'fmail2'
+cask 'fmail3' # Fastmail Client
 cask 'font-meslo-lg-nerd-font'
 # cask 'franz' # Using whatsapp cask directly
 cask 'fujitsu-scansnap-home'

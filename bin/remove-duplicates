@@ -1,0 +1,89 @@
+#!/bin/sh
+
+# Script to find files by name that exist in both folders and delete them from the first folder
+# Usage: ./remove-duplicates.sh <folderDeletingFiles> <folderKeepingFiles>
+# Files found in both folders will be deleted from folderDeletingFiles
+
+# Check if correct number of arguments provided
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <folderDeletingFiles> <folderKeepingFiles>"
+    echo "Files that exist in both folders will be deleted from folderDeletingFiles"
+    exit 1
+fi
+
+FOLDER_DELETING_FILES="$1"
+FOLDER_KEEPING_FILES="$2"
+
+# Check if both folders exist
+if [ ! -d "$FOLDER_DELETING_FILES" ]; then
+    echo "Error: Folder '$FOLDER_DELETING_FILES' does not exist"
+    exit 1
+fi
+
+if [ ! -d "$FOLDER_KEEPING_FILES" ]; then
+    echo "Error: Folder '$FOLDER_KEEPING_FILES' does not exist"
+    exit 1
+fi
+
+# Check if folders are readable
+if [ ! -r "$FOLDER_DELETING_FILES" ]; then
+    echo "Error: Cannot read folder '$FOLDER_DELETING_FILES'"
+    exit 1
+fi
+
+if [ ! -r "$FOLDER_KEEPING_FILES" ]; then
+    echo "Error: Cannot read folder '$FOLDER_KEEPING_FILES'"
+    exit 1
+fi
+
+echo "Comparing folders:"
+echo "  Folder DELETING Files: $FOLDER_DELETING_FILES"
+echo "  Folder Keeping Files:  $FOLDER_KEEPING_FILES"
+echo ""
+
+# Find common files (using temporary files since sh doesn't support process substitution)
+ls "$FOLDER_DELETING_FILES" | sort > /tmp/folderDeletingFiles_$
+ls "$FOLDER_KEEPING_FILES" | sort > /tmp/folderKeepingFiles_$
+common_files=$(comm -12 /tmp/folderDeletingFiles_$ /tmp/folderKeepingFiles_$)
+rm /tmp/folderDeletingFiles_$ /tmp/folderKeepingFiles_$
+
+# Check if any common files found
+if [ -z "$common_files" ]; then
+    echo "No common files found between the two folders."
+    exit 0
+fi
+
+# Display common files
+echo "Files that exist in both folders:"
+echo "$common_files"
+echo ""
+
+# Count files
+file_count=$(echo "$common_files" | wc -l | tr -d ' ')
+echo "Total files to delete: $file_count"
+echo ""
+
+# Ask for confirmation
+echo "These files will be DELETED from: $FOLDER_DELETING_FILES"
+read -p "Are you sure you want to proceed? (y/N): " confirm
+
+if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ] || [ "$confirm" = "yes" ] || [ "$confirm" = "YES" ]; then
+    echo ""
+    echo "Deleting files..."
+
+    echo "$common_files" | while IFS= read -r filename; do
+        if [ -n "$filename" ]; then
+            file_path="$FOLDER_DELETING_FILES/$filename"
+            if rm "$file_path" 2>/dev/null; then
+                echo "✓ Deleted: $filename"
+            else
+                echo "✗ Failed to delete: $filename"
+            fi
+        fi
+    done
+
+    echo ""
+    echo "Operation completed."
+else
+    echo "Operation cancelled."
+fi
