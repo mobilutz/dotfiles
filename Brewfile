@@ -3,13 +3,13 @@ cask_args appdir: '/Applications'
 tap 'buo/cask-upgrade'
 tap 'github/gh'
 tap 'heroku/brew'
-tap 'homebrew/bundle'
+# tap 'homebrew/bundle'
 tap 'null-dev/firefox-profile-switcher'
 
 # brew 'act' # GitHub Actions locally
 brew 'awscli'
 brew 'bat'
-brew 'clamav'
+# brew 'clamav'
 brew 'coreutils'
 # brew 'docker' # Docker cask is enough!!!
 brew 'esptool'
@@ -31,8 +31,9 @@ brew 'minio'
 # brew 'minikube'
 brew 'mise'
 # brew 'n' # -> use mise
+# brew 'ncftp' # not really needed, but maybe in the future
 # brew 'node' # -> use mise
-brew 'null-dev/firefox-profile-switcher/firefox-profile-switcher-connector'
+# brew 'null-dev/firefox-profile-switcher/firefox-profile-switcher-connector' # I am not using firefox anymore
 brew 'oci-cli'
 brew 'openshift-cli' # OpenShift https://www.openshift.com/ - k8s management
 brew 'php'
@@ -40,6 +41,7 @@ brew 'postgresql' # needed for ruby pg gem install
 brew 'puma/puma/puma-dev'
 # brew 'rbenv' # -> use mise
 brew 'shpotify'
+brew 'snappy' # For MileCrew Apps
 brew 'spaceman-diff'
 brew 'spicetify-cli'
 brew 'tree'
@@ -53,27 +55,26 @@ brew 'zsh-syntax-highlighting'
 cask '1password'
 cask '1password-cli'
 cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/MacSettings/AlfredApp
-cask 'ao' # Microsoft To-Do
 cask 'anydesk'
 cask 'betterdisplay'
 cask 'brave-browser'
-cask 'cakebrew'
+cask 'bruno' # Postman Alternative
 # cask 'chatall' # Is not working
-cask 'cheatsheet'
+# cask 'cheatsheet' # Does not exist anymore
 cask 'cisdem-duplicate-finder'
 cask 'cleanmymac'
 cask 'colorpicker-materialdesign'
 cask 'cyberduck'
 cask 'diffmerge'
 cask 'displaylink'
-cask 'docker'
+cask 'docker-desktop'
 cask 'domzilla-caffeine'
 cask 'dropbox'
 cask 'evernote'
 cask 'exifrenamer'
 cask 'filemon'
-cask 'firefox'
-cask 'flux' # Screen color temperatur controller
+# cask 'firefox' # I am not using firefox anymore - problems with i.e. unifi webpage
+cask 'flux-app' # Screen color temperatur controller
 cask 'fmail3' # Fastmail Client
 cask 'font-meslo-lg-nerd-font'
 # cask 'franz' # Using whatsapp cask directly
@@ -81,7 +82,7 @@ cask 'fujitsu-scansnap-home'
 cask 'github'
 cask 'gpg-suite-no-mail'
 cask 'hiddenbar'
-cask 'httpie'
+cask 'httpie-desktop'
 cask 'istat-menus'
 cask 'iterm2'
 cask 'logi-options+'
