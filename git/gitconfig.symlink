@@ -103,7 +103,7 @@
 	bb = !${DOTZSH}/git/better-git-branch.sh
 
 	# Checkout master branch
-	com = checkout master
+	com = "!git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@")"
 
 	# Rebase origin/master
 	rom = rebase origin/master
@@ -257,7 +257,7 @@
 
 [difftool "sourcetree"]
 	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --nosplash \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 
 [mergetool "sourcetree"]
 	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
