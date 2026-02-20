@@ -1,6 +1,6 @@
 cask_args appdir: '/Applications'
 
-tap 'buo/cask-upgrade'
+tap 'buo/cask-upgrade' # Not working anymore
 tap 'github/gh'
 tap 'heroku/brew'
 # tap 'homebrew/bundle'
@@ -15,6 +15,7 @@ brew 'coreutils'
 # brew 'docker' # Docker cask is enough!!!
 brew 'esptool'
 brew 'eza'
+brew 'gatsby-cli'
 brew 'gh'
 brew 'git-secrets'
 brew 'gitleaks'
@@ -65,6 +66,8 @@ cask 'bruno' # Postman Alternative
 # cask 'cheatsheet' # Does not exist anymore
 cask 'cisdem-duplicate-finder'
 cask 'cleanmymac'
+cask 'claude'
+cask 'claude-code'
 cask 'colorpicker-materialdesign'
 cask 'cyberduck'
 cask 'diffmerge'
@@ -109,6 +112,7 @@ cask 'postgres-unofficial'
 cask 'postico'
 cask 'postman'
 cask 'proxy-audio-device' # This helps to make output volume controllable even when the device does not allow it
+cask 'qlmarkdown' # Markdown Viewer for finder
 cask 'rapidapi'
 cask 'raspberry-pi-imager'
 cask 'rectangle'
@@ -125,6 +129,7 @@ cask 'telegram'
 cask 'tower'
 cask 'visual-studio-code'
 cask 'vlc'
+cask 'vscodium'
 cask 'whatsapp'
 cask 'wifiman'
 cask 'zed'
