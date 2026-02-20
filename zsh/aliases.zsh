@@ -1,7 +1,7 @@
 alias reload!='. ~/.zshrc'
 
 alias cls='clear' # Good 'ol Clear Screen command
-alias cat='bat'
+# alias cat='bat'
 alias ls='eza'
 alias ll='ls -ahl'
 
