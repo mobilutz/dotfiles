@@ -6,7 +6,7 @@
 ROUTE_FLAGS=$(netstat -rn -f inet | awk '/^10\/23/{print $3; exit}')
 ROUTE_GW=$(netstat -rn -f inet | awk '/^10\/23/{print $2; exit}')
 
-if [[ -n "$ROUTE_FLAGS" && ("$ROUTE_FLAGS" == *"B"* || "$ROUTE_GW" != "link#"*) ]]; then
+if [[ -n "$ROUTE_FLAGS" && "$ROUTE_FLAGS" != "UCS" ]]; then
   mkdir -p "$HOME/Library/Logs"
   LOG="$HOME/Library/Logs/fix-local-route.log"
 
