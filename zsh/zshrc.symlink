@@ -1,3 +1,6 @@
+# Brew prefix
+BREW_PREFIX=$(brew --prefix)
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -123,7 +126,6 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-BREW_PREFIX=$(brew --prefix)
 export EDITOR="${BREW_PREFIX}/bin/code -w"
 export BUNLDER_EDITOR="${BREW_PREFIX}/bin/code -w"
 export GEM_OPEN_EDITOR="${BREW_PREFIX}/bin/code -w"
@@ -160,10 +162,6 @@ for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
 do
   source $file
 done
-
-# initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit
 
 # load every completion after autocomplete loads
 for file in ${(M)config_files:#*/completion.zsh}
