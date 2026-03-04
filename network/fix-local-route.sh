@@ -1,30 +1,35 @@
 #!/bin/bash
-# Fixes a corrupted 10.0.0.0/23 subnet route that occasionally appears on
-# macOS (injected by Docker), causing local network devices to become
-# unreachable. Logs to ~/Library/Logs/fix-local-route.log for diagnostics.
+# Fixes a corrupted 10.0.0.0/23 subnet route injected by Docker that causes
+# local network devices to become unreachable.
+# Logs to ~/Library/Logs/fix-local-route.log for diagnostics.
 
-# Only fix if NAS is unreachable AND the subnet route exists
-if ! ping -c 1 -t 2 10.0.0.10 &>/dev/null && netstat -rn -f inet | grep -q "^10\/23"; then
+if netstat -rn -f inet | grep -q "^10\/23"; then
   mkdir -p "$HOME/Library/Logs"
   LOG="$HOME/Library/Logs/fix-local-route.log"
-  ROUTE_FLAGS=$(netstat -rn -f inet | awk '/^10\/23/{print $3; exit}')
-  ROUTE_GW=$(netstat -rn -f inet | awk '/^10\/23/{print $2; exit}')
+  LAST_FIX="$HOME/.local-network-fix-last"
+  NOW=$(date +%s)
+  LAST=$(cat "$LAST_FIX" 2>/dev/null || echo 0)
 
-  echo "--- $(date) ---" >> "$LOG"
-  echo "Bad route detected (flags: $ROUTE_FLAGS, gw: $ROUTE_GW), NAS unreachable" >> "$LOG"
+  # Delete the route regardless, but only log/notify every 5 minutes
+  sudo /sbin/route delete 10.0.0.0/23 2>/dev/null
 
-  # Log active network-related processes
-  echo "--- Active network processes ---" >> "$LOG"
-  ps aux | grep -E "citrix|docker|vpn|utun" | grep -v grep >> "$LOG"
+  if (( NOW - LAST > 300 )); then
+    ROUTE_FLAGS=$(netstat -rn -f inet | awk '/^10\/23/{print $3; exit}')
+    ROUTE_GW=$(netstat -rn -f inet | awk '/^10\/23/{print $2; exit}')
 
-  # Log system network events from the last 60 seconds
-  echo "--- System network events ---" >> "$LOG"
-  log show --last 60s --predicate 'eventMessage contains "route" OR eventMessage contains "network"' --info 2>/dev/null | tail -20 >> "$LOG"
+    echo "--- $(date) ---" >> "$LOG"
+    echo "Route detected (flags: $ROUTE_FLAGS, gw: $ROUTE_GW), deleting" >> "$LOG"
 
-  echo "--- Deleting route ---" >> "$LOG"
-  sudo /sbin/route delete 10.0.0.0/23 2>&1 >> "$LOG"
+    echo "--- Active network processes ---" >> "$LOG"
+    ps aux | grep -E "citrix|docker|vpn|utun" | grep -v grep >> "$LOG"
 
-  osascript -e 'display notification "Local network route fixed" with title "Network Fix"'
+    echo "--- System network events ---" >> "$LOG"
+    log show --last 60s --predicate 'eventMessage contains "route" OR eventMessage contains "network"' --info 2>/dev/null | tail -20 >> "$LOG"
 
-  echo "" >> "$LOG"
+    echo "" >> "$LOG"
+
+    osascript -e 'display notification "Local network route fixed" with title "Network Fix"'
+
+    echo "$NOW" > "$LAST_FIX"
+  fi
 fi
