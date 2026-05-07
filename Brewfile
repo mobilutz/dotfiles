@@ -7,6 +7,7 @@ tap 'heroku/brew'
 tap 'null-dev/firefox-profile-switcher'
 
 # brew 'act' # GitHub Actions locally
+brew 'argon2'
 brew 'awscli'
 brew 'bat'
 # brew 'clamav'
@@ -31,7 +32,7 @@ brew 'k9s'
 brew 'kind'
 brew 'kubeconform'
 brew 'mas'
-brew 'minio'
+# brew 'minio' # Deprecated, it is a S3 compatible storage server
 # brew 'minikube'
 brew 'mise'
 # brew 'n' # -> use mise
@@ -44,7 +45,9 @@ brew 'php'
 brew 'postgresql' # needed for ruby pg gem install
 brew 'puma/puma/puma-dev'
 # brew 'rbenv' # -> use mise
+brew 'semgrep' # https://semgrep.dev/
 brew 'shpotify'
+brew 'sleepwatcher'
 brew 'snappy' # For MileCrew Apps
 brew 'spaceman-diff'
 brew 'tree'
@@ -56,7 +59,7 @@ brew 'zsh-autosuggestions'
 brew 'zsh-syntax-highlighting'
 
 cask '1password'
-cask '1password-cli'
+# cask '1password-cli'
 cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/MacSettings/AlfredApp
 cask 'anydesk'
 cask 'betterdisplay'
@@ -93,7 +96,7 @@ cask 'iterm2'
 cask 'knockknock'
 cask 'logi-options+'
 cask 'logitune'
-cask 'macdown'
+# cask 'macdown' # Deprecated
 cask 'macmediakeyforwarder' # Music button on keyboard handling
 cask 'maczip'
 cask 'michaelvillar-timer'
@@ -109,7 +112,7 @@ cask 'mqtt-explorer'
 cask 'opera'
 # cask 'osxfuse' # Does not work with macOS >= 14
 cask 'path-finder'
-cask 'postgres-unofficial'
+cask 'postgres-app'
 cask 'postico'
 cask 'postman'
 cask 'proxy-audio-device' # This helps to make output volume controllable even when the device does not allow it
@@ -122,7 +125,7 @@ cask 'rsyncui'
 cask 'sequel-ace'
 cask 'signal'
 cask 'sonos'
-cask 'sourcetree'
+# cask 'sourcetree'
 cask 'spotify'
 cask 'synology-drive'
 cask 'synology-note-station-client'
