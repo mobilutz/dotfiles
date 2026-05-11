@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "mcpServers": {
+    "Ref": {
+      "type": "http",
+      "url": "https://api.ref.tools/mcp",
+      "headers": {
+        "x-ref-api-key": "REPLACE_WITH_YOUR_REF_API_KEY"
+      }
+    }
+  }
+}
