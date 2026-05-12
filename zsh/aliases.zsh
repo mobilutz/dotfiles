@@ -40,7 +40,7 @@ alias homebrew='brew'
 
 alias listen="sudo lsof -i -P | grep -i \"listen\""
 
-alias argon2hash='read -s "password?Paste password (input hidden, press Enter): " && echo && echo -n "$password" | argon2 "$(openssl rand -hex 16)" -id -t 3 -m 14 -p 1 -e; unset password'
+alias argon2hash='read -s "password?Paste password (input hidden, press Enter): " && echo && echo -n "$password" | argon2 $(openssl rand -hex 16) -id -t 3 -m 14 -p 1 -e; unset password'
 
 alias convert_heic='for f in *.[hH][eE][iI][cC]; do sips -s format jpeg "${f}" --out "${f%.*}.jpg"; rm "${f}"; done'
 alias exif_rename='for f in *.[jJ][pP]*[gG]; do jhead -n%Y-%m-%d_%H-%M-%S "${f}"; done'
