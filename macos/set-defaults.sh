@@ -265,17 +265,8 @@ sudo chflags uchg /private/var/vm/sleepimage
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
-# Save screenshots to the desktop
-defaults write com.apple.screencapture location -string "${HOME}/Pictures/Screenshots"
-
-# Save screenshots in JPG format (other options: BMP, GIF, JPG, PNG, PDF, TIFF)
-defaults write com.apple.screencapture type -string "jpg"
-
-# Disable shadow in screenshots
-defaults write com.apple.screencapture disable-shadow -bool true
-
-# Disable screenshot preview
-defaults write com.apple.screencapture show-thumbnail -bool false
+# Screenshot defaults (location, type, thumbnail, shadow) live in the
+# screenshots/ topic — see screenshots/install.sh.
 
 # Enable subpixel font rendering on non-Apple LCDs
 # Reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501
