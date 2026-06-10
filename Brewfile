@@ -71,7 +71,7 @@ cask 'bruno' # Postman Alternative
 cask 'cisdem-duplicate-finder'
 cask 'cleanmymac'
 cask 'claude'
-cask 'claude-code'
+# claude-code -> use mise
 cask 'colorpicker-materialdesign'
 cask 'cyberduck'
 cask 'diffmerge'
