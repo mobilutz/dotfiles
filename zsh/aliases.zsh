@@ -8,7 +8,7 @@ alias ll='ls -ahl'
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
 
-alias biggest="du -sk * | sort -rn | head -11"
+alias biggest="du -skh * | sort -hr | head -11"
 
 alias rsp='bundle exec rails s -b 0.0.0.0 -p 3000 -u puma'
 alias rs='bundle exec rails s -b 0.0.0.0'
@@ -79,3 +79,5 @@ function git-amend-to() (
   git checkout "$current_branch"
   git rebase --onto "$new_sha" "$apply_to"
 )
+
+alias jwt-decode='cut -d. -f2 | base64 -d | jq'
