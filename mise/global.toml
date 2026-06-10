@@ -1,0 +1,8 @@
+[tools]
+ruby = "latest"
+node = "latest"
+go = "latest"
+claude-code = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node", "ruby"]
