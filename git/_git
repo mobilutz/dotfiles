@@ -265,7 +265,7 @@ __git_zsh_main ()
 			-c|--work-tree|--namespace)	(( i++ )) ;;
 			-C)		__git_C_args+=(-C ${orig_words[i+1]}); (( i++ )) ;;
 			-*)		;;
-			*)		__git_cmd_idx=i; break ;;
+			*)		__git_cmd_idx=$i; break ;;
 			esac
 			(( i++ ))
 		done
