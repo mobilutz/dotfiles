@@ -1,5 +1,6 @@
 *.local.*
 !*.local.*.example
+tmp
 
 Brewfile.lock.json
 dotfiles.initialized
