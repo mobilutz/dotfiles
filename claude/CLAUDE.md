@@ -4,6 +4,10 @@
 
 Never chain commands with `&&`. Always use separate Bash tool calls — one command per call. Chaining with `&&` breaks permissions.
 
+## Scratch files
+
+NEVER write scratch files (curl output, header dumps, cookie jars, log copies, etc.) to `/tmp`. Always use the project's own `tmp/` directory instead.
+
 ## coding
 
 - favour readable source code over code comments
