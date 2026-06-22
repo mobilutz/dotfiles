@@ -46,7 +46,7 @@ author = nil
 state = :pre_author
 `git log -M -C -C -p --no-color --use-mailmap`.clean.split("\n").each do |l|
   case
-  when (state == :pre_author || state == :post_author) && l =~ /Author: (.*)$/
+  when state == :pre_author && l =~ /Author: (.*)$/
     author = $1
     state = :post_author
     lines[author] ||= 0
