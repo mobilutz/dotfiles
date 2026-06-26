@@ -1,0 +1,20 @@
+#!/bin/zsh
+#
+# Wrapper around the VSCode CLI.
+#
+# When run as `code .` in a directory that contains exactly one
+# *.code-workspace file, open that workspace instead of the bare folder.
+# This makes per-folder .vscode settings load (needed e.g. so the Deno
+# sub-repos format with `deno fmt` instead of the shared prettier config).
+#
+# Any other invocation passes straight through to the real `code` binary.
+
+if [[ "$1" == "." && $# -eq 1 ]]; then
+  local workspaces=( *.code-workspace(N) )
+  if (( ${#workspaces} == 1 )); then
+    command code "${workspaces[1]}"
+    return
+  fi
+fi
+
+command code "$@"
