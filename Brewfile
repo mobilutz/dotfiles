@@ -15,6 +15,7 @@ brew 'bat'
 brew 'coreutils'
 # brew 'deno' # -> use mise
 # brew 'docker' # Docker cask is enough!!!
+brew 'esphome'
 brew 'esptool'
 brew 'eza'
 brew 'gatsby-cli'
