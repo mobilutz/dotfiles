@@ -198,7 +198,6 @@ source ~/.zshrc.local
 
 export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=${GITHUB_TOKEN}:x-oauth-basic
 export BUNDLE_GITHUB__COM=x-access-token:${GITHUB_TOKEN}
-export NODE_AUTH_TOKEN=${parts[2]}
 
 # # Google Cloud SDK
 # source "${BREW_PREFIX}/share/google-cloud-sdk/path.zsh.inc"
