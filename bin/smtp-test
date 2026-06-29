@@ -1,0 +1,358 @@
+#!/bin/bash
+#
+# smtp-test - general SMTP connection tester
+#
+# Checks TCP reachability, banner, EHLO capabilities, STARTTLS or implicit TLS,
+# certificate details, and optionally AUTH. Works against any SMTP server.
+#
+# Connection details live in a gitignored INI config file, one [profile] per
+# server, so they can be retested later without retyping. Run with a profile
+# name: `smtp-test work`. Run with no argument to list available profiles.
+#
+# Requires: openssl, and one of ncat/nc/bash-tcp for the plain check.
+
+set -euo pipefail
+
+PROG=$(basename "$0")
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+usage() {
+  local cf
+  cf=$(default_conf)
+  cat <<EOF
+$PROG - test an SMTP connection from a saved profile
+
+Usage:
+  $PROG <profile>   run the named profile
+  $PROG             list profiles (this help)
+
+Config file (gitignored INI; override path with \$SMTP_TEST_CONF):
+  $cf
+
+Each [section] is a profile. Keys:
+  host      server hostname            (required)
+  port      port number                (default from mode)
+  mode      auto | plain | starttls | tls
+  user      username for AUTH          (enables auth check)
+  pass      password for AUTH          (prompts if user set without pass)
+  helo      EHLO/HELO hostname         (default: local hostname)
+  timeout   per-step timeout, seconds  (default: 10)
+  ip        4 | 6                      force IPv4 / IPv6
+  no_cert   1|true|yes                 skip certificate dump
+  verbose   1|true|yes                 show raw protocol dialog
+
+  user/pass may be a 1Password reference (op://Vault/Item/field), resolved
+  at runtime via the op CLI. Store the reference, not the secret.
+
+Mode 'auto': port 465 -> tls, otherwise -> starttls.
+
+Example profile:
+  [work]
+  host = mail.corp.com
+  port = 587
+  mode = starttls
+  user = me@corp.com
+  pass = op://Vault/Item/field
+EOF
+  if [[ -f "$cf" ]]; then
+    echo
+    echo "Profiles in $cf:"
+    grep -E '^[[:space:]]*\[' "$cf" \
+      | sed -E 's/^[[:space:]]*\[[[:space:]]*//; s/[[:space:]]*\][[:space:]]*$//; s/^/  /'
+  fi
+}
+
+# Default profile file: gitignored *.local.conf in the mail/ topic.
+default_conf() {
+  echo "${SMTP_TEST_CONF:-$SCRIPT_DIR/../mail/smtp-test.local.conf}"
+}
+
+# Read one profile's key=value pairs from an INI file. Emits "key<TAB>value".
+read_profile() {
+  local file="$1" name="$2"
+  awk -v section="$name" '
+    /^[[:space:]]*[#;]/ { next }
+    /^[[:space:]]*\[/ {
+      line=$0
+      gsub(/^[[:space:]]*\[[[:space:]]*|[[:space:]]*\][[:space:]]*$/, "", line)
+      cur=line
+      next
+    }
+    cur==section && index($0, "=") {
+      key=$0; val=$0
+      sub(/=.*/, "", key)
+      sub(/^[^=]*=/, "", val)
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", key)
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", val)
+      print key "\t" val
+    }
+  ' "$file"
+}
+
+# Resolve a value that may be a 1Password secret reference (op://...).
+# Plain values pass through unchanged. Requires the `op` CLI for op:// refs.
+resolve_secret() {
+  local v="$1"
+  if [[ "$v" != op://* ]]; then
+    printf '%s' "$v"
+    return 0
+  fi
+  if ! command -v op >/dev/null 2>&1; then
+    echo "$PROG: '$v' needs the 1Password CLI (op), not found" >&2
+    exit 1
+  fi
+  local out
+  if ! out=$(op read "$v" 2>/dev/null); then
+    echo "$PROG: failed to read $v from 1Password (signed in? try: eval \$(op signin))" >&2
+    exit 1
+  fi
+  printf '%s' "$out"
+}
+
+# --- select profile ---------------------------------------------------------
+CONF=$(default_conf)
+
+# No argument: show help and list available profiles.
+if [[ $# -eq 0 ]]; then
+  usage
+  exit 0
+fi
+
+case "$1" in
+  -h|--help) usage; exit 0 ;;
+  -*) echo "$PROG: not an option - pass a profile name (try: $PROG)" >&2; exit 2 ;;
+esac
+
+PROFILE="$1"
+
+if [[ ! -f "$CONF" ]]; then
+  echo "$PROG: no config file: $CONF" >&2
+  exit 1
+fi
+
+# --- load profile values ----------------------------------------------------
+MODE=auto
+HELO=$(hostname -f 2>/dev/null || hostname)
+USER=""
+PASS=""
+PASS_SET=0
+TIMEOUT=10
+IPFLAG=""
+SHOW_CERT=1
+VERBOSE=0
+HOST=""
+PORT=""
+
+found=0
+while IFS=$'\t' read -r key val; do
+  found=1
+  case "$key" in
+    host)    HOST="$val" ;;
+    port)    PORT="$val" ;;
+    mode)    MODE="$val" ;;
+    helo)    HELO="$val" ;;
+    user)    USER="$val" ;;
+    pass)    PASS="$val"; PASS_SET=1 ;;
+    timeout) TIMEOUT="$val" ;;
+    ip)      [[ "$val" == "6" ]] && IPFLAG="-6" || IPFLAG="-4" ;;
+    no_cert) [[ "$val" =~ ^(1|true|yes)$ ]] && SHOW_CERT=0 ;;
+    verbose) [[ "$val" =~ ^(1|true|yes)$ ]] && VERBOSE=1 ;;
+    *)       echo "$PROG: warning: unknown key '$key' in profile [$PROFILE]" >&2 ;;
+  esac
+done < <(read_profile "$CONF" "$PROFILE")
+
+if [[ "$found" -eq 0 ]]; then
+  echo "$PROG: profile not found: [$PROFILE] in $CONF" >&2
+  exit 1
+fi
+
+if [[ -z "$HOST" ]]; then
+  echo "$PROG: profile [$PROFILE] has no 'host'" >&2
+  exit 1
+fi
+
+# Resolve default port from mode.
+if [[ -z "$PORT" ]]; then
+  case "$MODE" in
+    tls)      PORT=465 ;;
+    plain)    PORT=25 ;;
+    *)        PORT=587 ;;
+  esac
+fi
+
+# Resolve auto mode.
+if [[ "$MODE" == "auto" ]]; then
+  if [[ "$PORT" == "465" ]]; then MODE=tls; else MODE=starttls; fi
+fi
+
+# Prompt for password if user given without pass.
+if [[ -n "$USER" && "$PASS_SET" -eq 0 ]]; then
+  read -r -s -p "Password for $USER: " PASS
+  echo
+fi
+
+# Resolve 1Password references (op://...) in user/pass.
+USER=$(resolve_secret "$USER")
+PASS=$(resolve_secret "$PASS")
+
+red='\033[0;31m'; green='\033[0;32m'; yellow='\033[0;33m'; blue='\033[0;34m'; clear='\033[0m'
+[[ -t 1 ]] || { red=''; green=''; yellow=''; blue=''; clear=''; }
+
+ok()   { printf "  [ ${green}OK${clear} ] %s\n" "$*"; }
+warn() { printf "  [${yellow}WARN${clear}] %s\n" "$*"; }
+fail() { printf "  [${red}FAIL${clear}] %s\n" "$*"; }
+info() { printf "         %s\n" "$*"; }
+
+label="$HOST:$PORT  mode=$MODE  helo=$HELO  timeout=${TIMEOUT}s"
+[[ -n "$PROFILE" ]] && label="[$PROFILE] $label"
+echo "Target: $label"
+echo
+
+# ---------------------------------------------------------------------------
+# 1. TCP reachability
+# ---------------------------------------------------------------------------
+if command -v nc >/dev/null 2>&1; then
+  if nc -z -w "$TIMEOUT" $IPFLAG "$HOST" "$PORT" >/dev/null 2>&1; then
+    ok "TCP connect $HOST:$PORT"
+  else
+    fail "cannot reach $HOST:$PORT (TCP)"
+    exit 1
+  fi
+else
+  warn "nc not found - skipping standalone TCP probe"
+fi
+
+# ---------------------------------------------------------------------------
+# Build the SMTP dialog we feed to the server.
+# ---------------------------------------------------------------------------
+build_dialog() {
+  local with_starttls="$1"
+  printf 'EHLO %s\r\n' "$HELO"
+  sleep 1
+  if [[ "$with_starttls" == "1" ]]; then
+    printf 'STARTTLS\r\n'
+    sleep 1
+  fi
+}
+
+# AUTH PLAIN dialog (after TLS established). Single-shot: the SASL PLAIN token
+# is "\0<user>\0<pass>" base64-encoded, sent on the AUTH line itself. Avoids the
+# interactive 334 challenge/response of AUTH LOGIN, which desyncs over a blind,
+# sleep-paced pipe.
+build_auth() {
+  printf 'EHLO %s\r\n' "$HELO"
+  sleep 1
+  printf 'AUTH PLAIN %s\r\n' "$(printf '\0%s\0%s' "$USER" "$PASS" | openssl base64 -A)"
+  sleep 1
+  printf 'QUIT\r\n'
+}
+
+run_openssl() {
+  # $1 = s_client extra args ; reads dialog from stdin.
+  # No -crlf: we already emit CRLF in the dialog. Adding -crlf would translate
+  # our \n into another CR, producing \r\r\n - which strict servers (e.g.
+  # Fastmail) reject as an invalid command.
+  local extra="$1"
+  timeout "$TIMEOUT" openssl s_client -connect "$HOST:$PORT" -quiet \
+    $extra 2>/dev/null
+}
+
+# ---------------------------------------------------------------------------
+# 2 + 3. Protocol dialog and TLS
+# ---------------------------------------------------------------------------
+TMP=$(mktemp -t smtp-test.XXXXXX)
+trap 'rm -f "$TMP"' EXIT
+
+case "$MODE" in
+  plain)
+    {
+      printf 'EHLO %s\r\n' "$HELO"; sleep 1
+      printf 'QUIT\r\n'; sleep 1
+    } | timeout "$TIMEOUT" openssl s_client -connect "$HOST:$PORT" -quiet -starttls smtp 2>/dev/null >"$TMP" || true
+    # plain mode: just talk raw via nc if available, else fall back
+    if command -v nc >/dev/null 2>&1; then
+      {
+        printf 'EHLO %s\r\n' "$HELO"; sleep 1
+        printf 'QUIT\r\n'; sleep 1
+      } | timeout "$TIMEOUT" nc $IPFLAG "$HOST" "$PORT" >"$TMP" 2>/dev/null || true
+    fi
+    ;;
+  starttls)
+    build_dialog 0 | run_openssl "-starttls smtp $IPFLAG -showcerts" >"$TMP" || true
+    ;;
+  tls)
+    build_dialog 0 | run_openssl "$IPFLAG -showcerts" >"$TMP" || true
+    ;;
+  *)
+    fail "unknown mode: $MODE"; exit 2 ;;
+esac
+
+if [[ ! -s "$TMP" ]]; then
+  fail "no response from server (check mode/port; try -v)"
+  exit 1
+fi
+
+# Banner
+BANNER=$(grep -m1 '^220' "$TMP" || true)
+[[ -n "$BANNER" ]] && ok "banner: ${BANNER#220 }" || warn "no 220 banner seen"
+
+# EHLO 250 capabilities
+if grep -q '^250' "$TMP"; then
+  ok "EHLO accepted"
+  CAPS=$(grep '^250[ -]' "$TMP" | sed -E 's/^250[ -]//' | sort -u | tr '\n' ' ')
+  info "caps: $CAPS"
+  grep -qi 'STARTTLS' "$TMP" && info "server advertises STARTTLS"
+  AUTHLINE=$(grep -i '^250[ -]AUTH' "$TMP" | head -1 || true)
+  [[ -n "$AUTHLINE" ]] && info "auth mechanisms:${AUTHLINE#*AUTH}"
+else
+  warn "no 250 EHLO response parsed"
+fi
+
+# ---------------------------------------------------------------------------
+# 4. Certificate details (TLS / STARTTLS only)
+# ---------------------------------------------------------------------------
+if [[ "$SHOW_CERT" -eq 1 && "$MODE" != "plain" ]]; then
+  STARTTLS_ARG=""
+  [[ "$MODE" == "starttls" ]] && STARTTLS_ARG="-starttls smtp"
+  CERT=$(printf 'QUIT\r\n' | timeout "$TIMEOUT" openssl s_client -connect "$HOST:$PORT" $STARTTLS_ARG $IPFLAG 2>/dev/null \
+         | openssl x509 -noout -subject -issuer -dates 2>/dev/null || true)
+  if [[ -n "$CERT" ]]; then
+    ok "TLS certificate:"
+    echo "$CERT" | sed 's/^/         /'
+  else
+    warn "could not read TLS certificate"
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# 5. AUTH check (optional)
+# ---------------------------------------------------------------------------
+if [[ -n "$USER" ]]; then
+  echo
+  STARTTLS_ARG=""
+  [[ "$MODE" == "starttls" ]] && STARTTLS_ARG="-starttls smtp"
+  if [[ "$MODE" == "plain" ]]; then
+    warn "AUTH over plain mode is insecure; sending anyway"
+  fi
+  AUTH_OUT=$(build_auth | timeout "$TIMEOUT" openssl s_client -connect "$HOST:$PORT" -quiet $STARTTLS_ARG $IPFLAG 2>/dev/null || true)
+  if echo "$AUTH_OUT" | grep -q '^235'; then
+    ok "AUTH PLAIN succeeded for $USER"
+  elif echo "$AUTH_OUT" | grep -q '^535'; then
+    fail "AUTH PLAIN rejected (535) for $USER - check credentials"
+  else
+    warn "AUTH result unclear:"
+    echo "$AUTH_OUT" | grep -E '^(5|4|2)[0-9][0-9]' | tail -3 | sed 's/^/         /'
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Verbose raw dialog
+# ---------------------------------------------------------------------------
+if [[ "$VERBOSE" -eq 1 ]]; then
+  echo
+  printf "  ${blue}--- raw dialog ---${clear}\n"
+  sed 's/^/  /' "$TMP"
+fi
+
+echo
+ok "done"

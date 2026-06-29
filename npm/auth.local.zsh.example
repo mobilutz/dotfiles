@@ -1,0 +1,15 @@
+# Template for npm/auth.local.zsh (the real file is gitignored via *.local.*).
+#
+# Copy this to npm/auth.local.zsh and replace the placeholder 1Password
+# references with your own vault/item/field paths:
+#
+#   cp npm/auth.local.zsh.example npm/auth.local.zsh
+#
+# Resolves npm registry tokens from 1Password (eager). ~/.npmrc interpolates
+# these ${VARs} at read time, so they must be exported before npm/yarn runs.
+# Interactive shells only; never block startup.
+if [[ -o interactive ]] && command -v op >/dev/null 2>&1; then
+  : ${NPM_GITHUB_TOKEN:=$(op read "op://<VAULT>/<ITEM>/<FIELD>" 2>/dev/null)}
+  : ${NPM_TOKEN:=$(op read "op://<VAULT>/<ITEM>/<FIELD>" 2>/dev/null)}
+  export NPM_GITHUB_TOKEN NPM_TOKEN
+fi

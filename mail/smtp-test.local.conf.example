@@ -1,0 +1,48 @@
+# smtp-test profiles
+#
+# Copy this file to smtp-test.local.conf (same directory) and fill in real
+# servers. The .local.conf name is gitignored, so credentials never get
+# committed. Retest any server later with:
+#
+#   smtp-test <profile>     run a profile
+#   smtp-test               list profiles
+#
+# Each [section] is one profile. Recognised keys:
+#
+#   host     server hostname            (required)
+#   port     port number                (default from mode)
+#   mode     auto | plain | starttls | tls   (default: auto)
+#   user     username for AUTH            (optional; enables auth check)
+#   pass     password for AUTH            (optional; prompts if user set, no pass)
+#
+# user/pass may be a plain value OR a 1Password reference (op://Vault/Item/field),
+# resolved at runtime via the `op` CLI. Store the reference, not the secret:
+#   pass = op://Vault/Item/field
+#   helo     EHLO/HELO hostname         (default: local hostname)
+#   timeout  per-step timeout, seconds  (default: 10)
+#   ip       4 | 6                      force IPv4 / IPv6 (optional)
+#   no_cert  1 | true | yes             skip certificate dump (optional)
+#   verbose  1 | true | yes             show raw protocol dialog (optional)
+
+[work]
+host    = mail.corp.com
+port    = 587
+mode    = starttls
+user    = me@corp.com
+pass    = changeme
+helo    = myhost.corp.com
+timeout = 10
+
+[gmail]
+host = smtp.gmail.com
+port = 587
+mode = starttls
+user = me@gmail.com
+pass = app-specific-password
+
+[smtps]
+host = mail.example.com
+port = 465
+mode = tls
+user = me@example.com
+pass = secret
