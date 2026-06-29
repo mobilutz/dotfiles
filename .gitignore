@@ -5,3 +5,4 @@ tmp
 
 Brewfile.lock.json
 dotfiles.initialized
+*.code-workspace

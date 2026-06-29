@@ -67,6 +67,11 @@ defaults, and so on. Tweak this script, and occasionally run `dot` from
 time to time to keep your environment fresh and up-to-date. You can find
 this script in `bin/`.
 
+## private config
+
+Machine-specific secrets and identity (`*.local.*` files) are gitignored here
+and versioned in a separate private repo, kept in sync across my machines.
+
 ## bugs
 
 I want this to work for everyone; that means when you clone it down it should
