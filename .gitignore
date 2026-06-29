@@ -1,5 +1,6 @@
 *.local.*
 !*.local.*.example
+!*.local.example
 tmp
 
 Brewfile.lock.json
