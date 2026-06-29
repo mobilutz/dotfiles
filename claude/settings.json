@@ -28,7 +28,7 @@
       "Read(**/.env.*)"
     ]
   },
-  "model": "opus[1m]",
+  "model": "sonnet",
   "statusLine": {
     "type": "command",
     "command": "bash /Users/ll/.claude/statusline-command.sh"
