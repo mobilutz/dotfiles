@@ -44,6 +44,7 @@ brew 'mise'
 brew 'oci-cli'
 brew 'openshift-cli' # OpenShift https://www.openshift.com/ - k8s management
 brew 'php'
+brew 'pipx'
 brew 'postgresql' # needed for ruby pg gem install
 brew 'puma/puma/puma-dev'
 # brew 'rbenv' # -> use mise
