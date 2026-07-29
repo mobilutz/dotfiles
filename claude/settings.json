@@ -28,7 +28,7 @@
       "Read(**/.env.*)"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "claude-sonnet-5",
   "statusLine": {
     "type": "command",
     "command": "bash /Users/ll/.claude/statusline-command.sh"
@@ -38,7 +38,8 @@
     "skill-creator@claude-plugins-official": true,
     "ruby-lsp@claude-plugins-official": false,
     "caveman@caveman": true,
-    "code-simplifier@claude-plugins-official": false
+    "code-simplifier@claude-plugins-official": false,
+    "figma@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -49,5 +50,6 @@
     }
   },
   "effortLevel": "high",
-  "theme": "dark"
+  "theme": "dark",
+  "skipWorkflowUsageWarning": true
 }

@@ -1,2 +1,22 @@
 # Github PAT from MobiLutz
-export GITHUB_TOKEN=__GITHUB__PERSONAL_ACCESS_TOKEN__
+# Eager (always in ENV), but cached with TTL: op read only runs when the cache
+# is missing/stale, not on every shell start. Falls back to a stale cache if
+# op is unreachable (offline, 1Password locked) rather than blanking the token.
+_github_token_cache="$HOME/.cache/github-token.env"
+_github_token_ttl=$((12 * 3600))  # seconds
+_github_token_age=$_github_token_ttl
+[[ -f "$_github_token_cache" ]] && _github_token_age=$(( $(date +%s) - $(stat -f %m "$_github_token_cache") ))
+
+if [[ -s "$_github_token_cache" && $_github_token_age -lt $_github_token_ttl ]]; then
+  GITHUB_TOKEN="$(<"$_github_token_cache")"
+else
+  GITHUB_TOKEN="$(op read 'op://Private/GitHub/Section/PAT' --account YOUR_ACCOUNT.1password.com 2>/dev/null)"
+  if [[ -n "$GITHUB_TOKEN" ]]; then
+    mkdir -p "${_github_token_cache:h}"
+    ( umask 077; print -r -- "$GITHUB_TOKEN" > "$_github_token_cache" )
+  elif [[ -s "$_github_token_cache" ]]; then
+    GITHUB_TOKEN="$(<"$_github_token_cache")"
+  fi
+fi
+export GITHUB_TOKEN
+unset _github_token_cache _github_token_ttl _github_token_age
