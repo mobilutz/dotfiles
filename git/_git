@@ -258,17 +258,31 @@ __git_zsh_main ()
 
 		while (( i <= $#orig_words )); do
 			case ${orig_words[i]} in
-			--git-dir=*)	__git_dir=${orig_words[i]#--git-dir=} ;;
-			--git-dir)	(( i++ )); __git_dir=${orig_words[i]} ;;
-			--bare)		__git_dir=. ;;
-			--help)		command=help; break ;;
-			-c|--work-tree|--namespace)	(( i++ )) ;;
-			-C)		__git_C_args+=(-C ${orig_words[i+1]}); (( i++ )) ;;
-			-*)		;;
-			*)		__git_cmd_idx=$i; break ;;
+			-C)
+				__git_C_args+=(-C ${orig_words[i+1]})
+				(( i++ ))
+				;;
+			-c|--git-dir|--work-tree|--namespace)
+				(( i++ ))
+				;;
+			-*)
+				;;
+			*)
+				break
+				;;
 			esac
 			(( i++ ))
 		done
+
+		__git_cmd_idx=$(( i - 1 ))
+
+		if (( $+opt_args[--bare] )); then
+			__git_dir='.'
+		else
+			__git_dir=${opt_args[--git-dir]}
+		fi
+
+		(( $+opt_args[--help] )) && command='help'
 
 		words=( ${orig_words[@]} )
 
