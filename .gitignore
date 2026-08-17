@@ -3,6 +3,12 @@
 !*.local.example
 tmp
 
+# global ~/.gitignore blanket-ignores .claude/ — re-include only the
+# team-shared files, leave .claude/plans/ and settings.local.json ignored
+!.claude/
+!.claude/CLAUDE.md
+!.claude/settings.json
+
 Brewfile.lock.json
 dotfiles.initialized
 *.code-workspace
