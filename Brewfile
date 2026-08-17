@@ -11,6 +11,7 @@ tap 'darrylmorley/whatcable'
 brew 'argon2'
 brew 'awscli'
 brew 'bat'
+brew 'blueutil'
 # brew 'clamav'
 brew 'coreutils'
 # brew 'deno' # -> use mise

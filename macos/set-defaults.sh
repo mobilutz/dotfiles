@@ -537,6 +537,11 @@ defaults write com.apple.WindowManager EnableStandardClickToShowDesktop 0
 # # Hide Safari’s bookmarks bar by default
 # defaults write com.apple.Safari ShowFavoritesBar -bool false
 
+# Always show Safari's "URL display" tab in the lower left on mouseover. Strangely
+# like, everyone and their LLMs on the internet thinks this is ShowStatusBar, but
+# it's not.
+defaults write com.apple.Safari ShowOverlayStatusBar -bool true
+
 # # Hide Safari’s sidebar in Top Sites
 # defaults write com.apple.Safari ShowSidebarInTopSites -bool false
 
