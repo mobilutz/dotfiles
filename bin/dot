@@ -83,3 +83,12 @@ if [ ${freshInstall} = 'true' ]; then
 	echo "› script/install"
 	$DOTZSH/script/install
 fi
+
+# Update claude-code only; -C $HOME ignores any project-local mise.toml
+if command -v mise >/dev/null 2>&1; then
+	echo "› mise upgrade claude-code"
+	mise -C $HOME upgrade claude-code
+
+	echo "› mise prune claude-code"
+	mise -C $HOME prune claude-code
+fi
