@@ -6,7 +6,6 @@
   },
   "permissions": {
     "allow": [
-      "Bash(cd /Users/ll/code/*)",
       "Bash(git add:*)",
       "Bash(git branch:*)",
       "Bash(git checkout:*)",
@@ -28,7 +27,7 @@
       "Read(**/.env.*)"
     ]
   },
-  "model": "claude-sonnet-5",
+  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash /Users/ll/.claude/statusline-command.sh"
@@ -50,6 +49,7 @@
     }
   },
   "effortLevel": "high",
+  "skipWorkflowUsageWarning": true,
   "theme": "dark",
-  "skipWorkflowUsageWarning": true
+  "autoCompactEnabled": false
 }

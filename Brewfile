@@ -51,7 +51,7 @@ brew 'puma/puma/puma-dev'
 brew 'semgrep' # https://semgrep.dev/
 brew 'shpotify'
 brew 'sleepwatcher'
-brew 'snappy' # For MileCrew Apps
+brew 'snappy' # compression lib needed by some work apps
 brew 'spaceman-diff'
 brew 'tree'
 brew 'vim'
@@ -112,6 +112,7 @@ cask 'microsoft-word'
 cask 'minecraft'
 cask 'mongodb-compass'
 cask 'mqtt-explorer'
+cask 'openlogi'
 cask 'opera'
 # cask 'osxfuse' # Does not work with macOS >= 14
 cask 'path-finder'
