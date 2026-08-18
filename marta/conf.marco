@@ -1,0 +1,29 @@
+environment {
+    terminal "iTerm2"
+    textEditor "VSCode"
+}
+
+behavior {
+    setCurrentPathAsWindowTitle true
+    theme "Classic"    
+    actions {    
+        "core.trash.confirm" true
+        "core.delete.confirm" true
+        "core.favorites.showPinnedPlaces" true
+        "core.copy.askTargetPath" true
+        "core.copy.inactive" false
+        "core.lookup.mode" "prefix"
+        "core.activate.next.tab.circular" true
+        "core.open.openExecutablesAsDirectories" false
+    }
+}
+
+keyBindings {
+    "Return" "core.rename"
+    "Cmd+Up" "core.go.up"
+    "Cmd+Down" "core.open"
+    "Opt+Up" "core.move.home"
+    "Opt+Down" "core.move.end"    
+    "Cmd+N" "core.new.folder"
+    "Cmd+Shift+N" "core.new.window"
+}
