@@ -103,6 +103,7 @@ cask 'logitune'
 # cask 'macdown' # Deprecated
 cask 'macmediakeyforwarder' # Music button on keyboard handling
 cask 'maczip'
+cask 'marta' # Two-pane file manager, config in marta/ topic
 cask 'michaelvillar-timer'
 cask 'microsoft-auto-update'
 cask 'microsoft-excel'
