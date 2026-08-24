@@ -1,0 +1,33 @@
+# Machine specific network identity for the "network" topic.
+#
+# Copy this file to ~/.dotfiles-private/network/network.conf and fill in the
+# real values. It is kept out of this public repo because the SSID and the
+# gateway MAC can be resolved to a physical location via wardriving databases.
+#
+# Find the values for your own network with:
+#   ipconfig getoption en0 router          # gateway IP
+#   arp -n <gateway-ip>                    # gateway MAC
+#   netstat -rn -f inet                    # current routes
+
+# --- dns-switch.sh ---
+# MAC address of the default gateway that identifies the home network
+TARGET_GW_MAC="aa:bb:cc:dd:ee:ff"
+
+# Human readable name for that network, used in log and notification only
+TARGET_NAME="HomeNet"
+
+# DNS servers to use on that network (space separated, IPv4 or IPv6)
+TARGET_DNS="192.0.2.10 192.0.2.1 1.1.1.1"
+
+# On every other network: "Empty" = back to DHCP/router DNS
+FALLBACK_DNS="Empty"
+
+# Network service name as shown in System Settings > Network
+SERVICE="Wi-Fi"
+
+# --- fix-local-route.sh ---
+# Subnet route that Docker corrupts and that has to be deleted
+BAD_ROUTE="192.0.2.0/23"
+
+# netstat -rn prints that route in its own abbreviated notation
+BAD_ROUTE_PATTERN="^192.0.2/23"

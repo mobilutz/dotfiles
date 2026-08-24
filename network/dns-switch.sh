@@ -6,31 +6,22 @@
 # SSID: recent macOS versions return the literal string "<redacted>" from
 # "ipconfig getsummary" unless the calling process holds Location Services
 # authorization, which a LaunchAgent does not.
+#
+# Gateway MAC, network name and DNS servers come from the private config,
+# see network/network.conf.example.
 
 set -uo pipefail
 
-# ----------------- CONFIG -----------------
-# Gateway MAC address that identifies the home network (lowercase, colons)
-TARGET_GW_MAC="aa:bb:cc:dd:ee:ff"
-
-# Human readable name for that network, used in log and notification only
-TARGET_NAME="HomeNet"
-
-# DNS servers to use on that network (space separated, IPv4 or IPv6)
-TARGET_DNS=(192.0.2.10 192.0.2.1 1.1.1.1)
-
-# Network service name as shown in System Settings > Network ("Wi-Fi" by default)
-SERVICE="Wi-Fi"
-
-# On every other known network: "Empty" = back to DHCP/router DNS
-FALLBACK_DNS=("Empty")
+. "$(dirname "$0")/config.sh"
 
 LOG="$HOME/Library/Logs/dns-switch.log"
-# ------------------------------------------
-
 mkdir -p "$(dirname "$LOG")"
 exec >>"$LOG" 2>&1
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*"; }
+
+# Config values arrive as space separated strings, DNS handling needs arrays
+read -r -a TARGET_DNS_LIST <<<"$TARGET_DNS"
+read -r -a FALLBACK_DNS_LIST <<<"$FALLBACK_DNS"
 
 # Pass the text as an argument so odd characters cannot break the AppleScript
 notify() {
@@ -54,7 +45,7 @@ fi
 trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 sleep 3   # let the network settle before reading the gateway
 
-# --- Find the BSD device for the Wi-Fi service (usually en0) ---
+# --- Find the BSD device for the network service (usually en0) ---
 DEV=$(networksetup -listnetworkserviceorder 2>/dev/null \
   | awk -v svc="$SERVICE" '
       $0 ~ "\\) " svc "$" { found=1; next }
@@ -88,10 +79,10 @@ fi
 # --- Decide what DNS should be ---
 if [ "$GW_MAC" = "$TARGET_GW_MAC" ]; then
   NET="$TARGET_NAME"
-  WANT=("${TARGET_DNS[@]}")
+  WANT=("${TARGET_DNS_LIST[@]}")
 else
   NET="$GW via $GW_MAC"
-  WANT=("${FALLBACK_DNS[@]}")
+  WANT=("${FALLBACK_DNS_LIST[@]}")
 fi
 
 # --- Read current DNS ---
