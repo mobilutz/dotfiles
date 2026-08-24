@@ -1,8 +1,9 @@
 # Machine specific network identity for the "network" topic.
 #
-# Copy this file to ~/.dotfiles-private/network/network.conf and fill in the
-# real values. It is kept out of this public repo because the SSID and the
-# gateway MAC can be resolved to a physical location via wardriving databases.
+# Copy this file to network/network.local.conf and fill in the real values.
+# That copy is ignored by this public repo via the "*.local.*" rule and is
+# versioned in the private dotfiles repo, because the SSID and the gateway MAC
+# can be resolved to a physical location via wardriving databases.
 #
 # Find the values for your own network with:
 #   ipconfig getoption en0 router          # gateway IP

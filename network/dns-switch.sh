@@ -7,8 +7,8 @@
 # "ipconfig getsummary" unless the calling process holds Location Services
 # authorization, which a LaunchAgent does not.
 #
-# Gateway MAC, network name and DNS servers come from the private config,
-# see network/network.conf.example.
+# Gateway MAC, network name and DNS servers come from the local config,
+# see network/network.local.conf.example.
 
 set -uo pipefail
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Installs the launchd agents of the network topic and their sudoers rules.
-# All host specific values come from the private config,
-# see network/network.conf.example.
+# All host specific values come from the local config,
+# see network/network.local.conf.example.
 
 DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Fixes a corrupted subnet route injected by Docker that causes local network
-# devices to become unreachable. The affected subnet comes from the private
-# config, see network/network.conf.example.
+# devices to become unreachable. The affected subnet comes from the local
+# config, see network/network.local.conf.example.
 # Logs to ~/Library/Logs/fix-local-route.log for diagnostics.
 
 . "$(dirname "$0")/config.sh"
