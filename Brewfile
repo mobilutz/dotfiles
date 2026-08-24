@@ -16,6 +16,7 @@ brew 'blueutil'
 brew 'coreutils'
 # brew 'deno' # -> use mise
 # brew 'docker' # Docker cask is enough!!!
+brew 'duti' # assigns default apps to file types
 brew 'esphome'
 brew 'esptool'
 brew 'eza'
@@ -146,6 +147,7 @@ cask 'whatcable'
 cask 'whatsapp'
 cask 'wifiman'
 cask 'zed'
+cask 'zettlr' # Markdown editor, default handler wired in macos/install.sh
 cask 'zoom'
 
 mas '1password for safari', id: 1569813296

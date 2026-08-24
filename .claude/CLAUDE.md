@@ -54,6 +54,8 @@ Defined in `zsh/zshrc.symlink`:
 
 `git/gitconfig.symlink` includes 100+ aliases and uses `~/.gitconfig.local` for per-machine user identity (name, email, signing key). GPG commit signing is enabled. Default branch is `main`.
 
+This repo has two remotes: `origin` (github.com/mobilutz/dotfiles) is the real remote for all pull/push work; `upstream` (github.com/holman/dotfiles) is the fork source, read-only. `main` must track `origin/main` or `bin/dot`'s `git pull` fails with "no tracking information".
+
 ## Private Config Repo
 
 Machine-specific secrets/identity are versioned in a SEPARATE private repo at `~/.dotfiles-private/` (regular git repo), synced across machines without going into the public repo.
