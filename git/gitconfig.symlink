@@ -184,7 +184,7 @@
 
 # Use vscode as editor
 	editor = code --wait
-	excludesfile = /Users/ll/.gitignore
+	excludesfile = ~/.gitignore
 
 [credential]
 	helper = osxkeychain
@@ -241,23 +241,6 @@
 [stash]
   includeUntracked = true
 
-# URL shorthands
-[url "git@github.com:"]
-	insteadOf = "gh:"
-	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
-
-[url "git://github.com/"]
-	insteadOf = "github:"
-
-[url "git@gist.github.com:"]
-	insteadOf = "gst:"
-	pushInsteadOf = "gist:"
-	pushInsteadOf = "git://gist.github.com/"
-
-[url "git://gist.github.com/"]
-	insteadOf = "gist:"
-
 [difftool "sourcetree"]
 	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --nosplash \"$LOCAL\" \"$REMOTE\"
 	path =
@@ -265,3 +248,9 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
 	trustExitCode = true
+[url "https://github.com/"]
+	insteadOf = gh:
+	insteadOf = github:
+[url "https://gist.github.com/"]
+	insteadOf = gist:
+	insteadOf = gst:

@@ -23,6 +23,7 @@ Thumbs.db
 vendor/bundle
 
 # VSCode files
+.vscode
 .vscode/*
 .vscode/**/*
 
@@ -32,6 +33,9 @@ vendor/bundle
 # Swap files
 *.swp
 
-# Files that might appear on external disks
-.Spotlight-V100
-.Trashes
+# Git
+.worktrees/*
+
+# AI
+.claude
+.claude/*

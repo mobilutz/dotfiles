@@ -7,7 +7,12 @@
 # This makes per-folder .vscode settings load (needed e.g. so the Deno
 # sub-repos format with `deno fmt` instead of the shared prettier config).
 #
+# A local, non-public setup can define `_code_pre_open` (in any */*.local.zsh)
+# to run a check against the target path before VSCode opens it.
+#
 # Any other invocation passes straight through to the real `code` binary.
+
+(( $+functions[_code_pre_open] )) && _code_pre_open "${@[-1]:-.}"
 
 if [[ "$1" == "." && $# -eq 1 ]]; then
   local workspaces=( *.code-workspace(N) )
