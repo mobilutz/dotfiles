@@ -513,7 +513,7 @@ defaults write com.apple.WindowManager EnableStandardClickToShowDesktop 0
 # Safari & WebKit                                                             #
 ###############################################################################
 
-# Disable all because of Could not write domain /Users/ll/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari; exiting
+# Disable all because of Could not write domain ~/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari; exiting
 # # Privacy: don’t send search queries to Apple
 # defaults write com.apple.Safari UniversalSearchEnabled -bool false
 # defaults write com.apple.Safari SuppressSearchSuggestions -bool true

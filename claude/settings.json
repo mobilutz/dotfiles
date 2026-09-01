@@ -17,7 +17,6 @@
       "Bash(ruby -ryaml -e:*)",
       "WebFetch(domain:code.claude.com)",
       "WebFetch(domain:docs.anthropic.com)",
-      "WebFetch(domain:docs.couper.io)",
       "WebFetch(domain:docs.github.com)"
     ],
     "deny": [
@@ -30,7 +29,7 @@
   "model": "opus[1m]",
   "statusLine": {
     "type": "command",
-    "command": "bash /Users/ll/.claude/statusline-command.sh"
+    "command": "bash $HOME/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": false,

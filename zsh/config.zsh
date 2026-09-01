@@ -53,7 +53,7 @@ export GPG_TTY=$(tty)
 source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # heroku autocomplete setup
-HEROKU_AC_ZSH_SETUP_PATH=/Users/ll/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
+HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
 # 1Password GitHub Integration
 # https://developer.1password.com/docs/cli/shell-plugins/github/
