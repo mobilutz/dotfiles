@@ -18,3 +18,27 @@ fi
 
 # shellcheck source=/dev/null
 . "$NETWORK_CONF"
+
+# --- DNS profiles -----------------------------------------------------------
+# Profiles are declared in the config as DNS_PROFILE_<name>="server ...".
+# Both dns.sh (manual switching) and dns-switch.sh (automatic enforcement)
+# resolve them through these two helpers, so the config stays the only place
+# where a DNS server address is written down.
+
+# Print the server list of a profile. Prints nothing for an unknown profile.
+dns_profile_servers() {
+  local varname="DNS_PROFILE_$1"
+  printf '%s' "${!varname-}"
+}
+
+# Print the names of all declared profiles, one per line.
+dns_profile_names() {
+  compgen -v | sed -n 's/^DNS_PROFILE_//p' | sort -u
+}
+
+# File written by dns.sh to tell dns-switch.sh to keep its hands off.
+DNS_OVERRIDE_FILE="${DNS_OVERRIDE_FILE:-$HOME/.dns-override}"
+
+# How long a manual override survives, in seconds. It is also dropped as soon
+# as the machine moves to a different network, see dns-switch.sh.
+DNS_OVERRIDE_MAX_AGE="${DNS_OVERRIDE_MAX_AGE:-28800}"   # 8 hours

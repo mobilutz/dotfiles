@@ -10,7 +10,8 @@ DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
 
 # ---------------------------------------------------------------------------
-# Route fix: deletes the corrupted subnet route Docker injects
+# Route fix: deletes an anomalous route for the local subnet, never the
+# legitimate on-link route of the primary interface
 # ---------------------------------------------------------------------------
 
 PLIST_SRC="$DOTFILES_ROOT/network/com.user.fix-local-route.plist"
@@ -57,14 +58,24 @@ launchctl kickstart -k "gui/$UID/com.local.dnsswitch"
 
 echo "  ✓ DNS switch agent installed (log: ~/Library/Logs/dns-switch.log)"
 
-# Grant the exact argument lists the script uses, not a wildcard: a wildcard
+# Grant the exact argument lists the scripts use, not a wildcard: a wildcard
 # would let any process running as this user repoint DNS to a rogue resolver.
+# One line per declared DNS profile, so dns.sh can switch to any of them without
+# a password prompt, plus the fallback used off the home network.
 DNS_SUDOERS_FILE="/etc/sudoers.d/dns-switch"
-DNS_SUDOERS_CONTENT="$(whoami) ALL=(ALL) NOPASSWD: /usr/sbin/networksetup -setdnsservers $SERVICE $TARGET_DNS
-$(whoami) ALL=(ALL) NOPASSWD: /usr/sbin/networksetup -setdnsservers $SERVICE $FALLBACK_DNS
-$(whoami) ALL=(ALL) NOPASSWD: /usr/bin/killall -HUP mDNSResponder"
+DNS_SUDOERS_CONTENT="$(
+  {
+    for dns_profile in $(dns_profile_names); do
+      echo "$(whoami) ALL=(ALL) NOPASSWD: /usr/sbin/networksetup -setdnsservers $SERVICE $(dns_profile_servers "$dns_profile")"
+    done
+    echo "$(whoami) ALL=(ALL) NOPASSWD: /usr/sbin/networksetup -setdnsservers $SERVICE $FALLBACK_DNS"
+  } | sort -u
+  echo "$(whoami) ALL=(ALL) NOPASSWD: /usr/bin/killall -HUP mDNSResponder"
+)"
 
-if ! sudo grep -qF "networksetup -setdnsservers $SERVICE $TARGET_DNS" "$DNS_SUDOERS_FILE" 2>/dev/null; then
+# Rewrite whenever the profiles changed, so adding a profile to the config is
+# enough and nobody has to remember to edit sudoers by hand.
+if [ "$(sudo cat "$DNS_SUDOERS_FILE" 2>/dev/null)" != "$DNS_SUDOERS_CONTENT" ]; then
   echo "$DNS_SUDOERS_CONTENT" | sudo tee "$DNS_SUDOERS_FILE" > /dev/null
   sudo chmod 440 "$DNS_SUDOERS_FILE"
   if ! sudo visudo -cf "$DNS_SUDOERS_FILE" > /dev/null; then

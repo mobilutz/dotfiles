@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.user.fix-local-route</string>
+    <string>com.user.fix-usb-audio</string>
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>DOTFILES_PATH/network/fix-local-route.sh</string>
+        <string>DOTFILES_PATH/audio/fix-usb-audio.sh</string>
     </array>
     <key>StartInterval</key>
     <integer>60</integer>

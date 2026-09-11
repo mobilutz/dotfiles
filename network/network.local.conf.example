@@ -17,7 +17,26 @@ TARGET_GW_MAC="aa:bb:cc:dd:ee:ff"
 # Human readable name for that network, used in log and notification only
 TARGET_NAME="HomeNet"
 
-# DNS servers to use on that network (space separated, IPv4 or IPv6)
+# --- DNS profiles ---
+# Single source of truth for every DNS server this machine ever uses.
+# dns.sh switches between them by name, dns-switch.sh enforces TARGET_PROFILE
+# on the home network. "Empty" hands control back to DHCP.
+#
+# Add a profile here and rerun network/install.sh so the sudoers rule covers it.
+DNS_PROFILE_home="192.0.2.10 192.0.2.1 1.1.1.1"
+DNS_PROFILE_ph="192.0.2.10"
+DNS_PROFILE_cf="1.1.1.1 1.0.0.1"
+DNS_PROFILE_auto="Empty"
+
+# Profile dns-switch.sh enforces while on the home network.
+#
+# Prefer a profile that lists only resolvers which know your local names. macOS
+# races resolvers rather than trying them in order, so mixing a local resolver
+# with a public one makes local hostname lookups fail intermittently.
+TARGET_PROFILE="ph"
+
+# DNS servers to use on that network (space separated, IPv4 or IPv6).
+# Kept for backwards compatibility, used only when TARGET_PROFILE is unset.
 TARGET_DNS="192.0.2.10 192.0.2.1 1.1.1.1"
 
 # On every other network: "Empty" = back to DHCP/router DNS
@@ -27,8 +46,18 @@ FALLBACK_DNS="Empty"
 SERVICE="Wi-Fi"
 
 # --- fix-local-route.sh ---
-# Subnet route that Docker corrupts and that has to be deleted
+# Local subnet. This is also the subnet of the legitimate on-link route, so the
+# script only deletes a route for it when that route is NOT the on-link route
+# of the primary interface.
 BAD_ROUTE="192.0.2.0/23"
 
 # netstat -rn prints that route in its own abbreviated notation
 BAD_ROUTE_PATTERN="^192.0.2/23"
+
+# LAN host that must answer while the network is healthy. When it answers, an
+# anomalous route is logged but left alone. Empty disables the check.
+HEALTH_HOST="192.0.2.20"
+
+# 1 = only log what would be deleted. Keep this on until the log proves that a
+# genuinely broken route actually appears.
+DRY_RUN="1"

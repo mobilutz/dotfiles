@@ -1,0 +1,33 @@
+# Host specific configuration for the "audio" topic.
+# Copy to audio.local.conf and adjust.
+
+# USB audio devices to watch, one product name per line.
+#
+# Use the exact string macOS reports, which you can read off either side of
+# the comparison the fix performs:
+#
+#   ioreg -w0 -l -c IOUSBHostDevice | grep '"USB Product Name"'
+#   system_profiler SPAudioDataType
+#
+# A device is only touched while it is plugged in, so listing a headset you
+# only sometimes carry is harmless.
+WATCHED_USB_AUDIO_DEVICES="
+Jabra SPEAK 510 USB
+"
+
+# How many consecutive checks must see the device on the USB bus but missing
+# from CoreAudio before anything is restarted. Enumeration and the CoreAudio
+# handoff together take about a second, so a single miss right after plugging
+# in is normal and must not trigger a restart.
+MISSES_BEFORE_FIX=2
+
+# Minimum seconds between two restart attempts. Keeps a device that is broken
+# for some other reason from causing a daemon restart every interval.
+FIX_COOLDOWN=300
+
+# Seconds to wait after killing a daemon before re-checking whether the
+# device came back.
+SETTLE_SECONDS=3
+
+# Set to 1 to log what would happen without restarting anything.
+DRY_RUN=0

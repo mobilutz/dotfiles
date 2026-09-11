@@ -19,8 +19,20 @@ mkdir -p "$(dirname "$LOG")"
 exec >>"$LOG" 2>&1
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*"; }
 
+# The profile named by TARGET_PROFILE is the source of truth. TARGET_DNS is
+# only consulted when no profile is configured, so older configs keep working.
+if [ -n "${TARGET_PROFILE:-}" ]; then
+  TARGET_DNS_RESOLVED=$(dns_profile_servers "$TARGET_PROFILE")
+  if [ -z "$TARGET_DNS_RESOLVED" ]; then
+    log "TARGET_PROFILE=$TARGET_PROFILE is not declared in $NETWORK_CONF - leaving DNS alone"
+    exit 1
+  fi
+else
+  TARGET_DNS_RESOLVED="${TARGET_DNS:-}"
+fi
+
 # Config values arrive as space separated strings, DNS handling needs arrays
-read -r -a TARGET_DNS_LIST <<<"$TARGET_DNS"
+read -r -a TARGET_DNS_LIST <<<"$TARGET_DNS_RESOLVED"
 read -r -a FALLBACK_DNS_LIST <<<"$FALLBACK_DNS"
 
 # Pass the text as an argument so odd characters cannot break the AppleScript
@@ -74,6 +86,29 @@ fi
 if [ -z "$GW_MAC" ]; then
   log "gateway $GW has no ARP entry on $DEV - leaving DNS alone"
   exit 0
+fi
+
+# --- Respect a manual override set by dns.sh ---
+# The override records the gateway MAC that was current when it was set. It
+# holds while that gateway is still the current one and drops as soon as the
+# machine joins a different network, so a LAN-only resolver forced at home
+# cannot follow the laptop elsewhere and leave it without a working resolver.
+if [ -r "$DNS_OVERRIDE_FILE" ]; then
+  OV_PROFILE=$(sed -n 's/^profile=//p' "$DNS_OVERRIDE_FILE")
+  OV_GW_MAC=$(sed -n 's/^gw_mac=//p' "$DNS_OVERRIDE_FILE")
+  OV_SET_AT=$(sed -n 's/^set_at=//p' "$DNS_OVERRIDE_FILE")
+  OV_AGE=$(( $(date +%s) - ${OV_SET_AT:-0} ))
+
+  if [ "$OV_GW_MAC" != "$GW_MAC" ]; then
+    log "override '$OV_PROFILE' was set on gateway $OV_GW_MAC, now on $GW_MAC - dropping it"
+    rm -f "$DNS_OVERRIDE_FILE"
+  elif [ "$OV_AGE" -gt "$DNS_OVERRIDE_MAX_AGE" ]; then
+    log "override '$OV_PROFILE' expired after ${OV_AGE}s - dropping it"
+    rm -f "$DNS_OVERRIDE_FILE"
+  else
+    log "override '$OV_PROFILE' active (${OV_AGE}s old) - leaving DNS alone"
+    exit 0
+  fi
 fi
 
 # --- Decide what DNS should be ---
