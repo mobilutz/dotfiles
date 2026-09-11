@@ -257,6 +257,58 @@ setup_vim () {
   fi
 }
 
+# The oh-my-zsh installer refuses to run without zsh, and on a fresh Debian box
+# nothing else puts it there. On macOS bin/dot does this later, via Homebrew.
+install_packages () {
+  if [ "$DOTFILES_OS" != "linux" ]
+  then
+    return
+  fi
+
+  info 'installing packages'
+
+  if [ "$(id -u)" = "0" ]
+  then
+    apt-get update -qq
+  else
+    sudo apt-get update -qq
+  fi
+
+  "$DOTFILES_ROOT/linux/install.linux.sh"
+}
+
+# None of this repo does anything under bash, and nothing on a Pi switches the
+# login shell for us. On macOS the shell is already zsh, so this returns early.
+setup_login_shell () {
+  local zsh_path
+  zsh_path="$(command -v zsh || true)"
+
+  [ -n "$zsh_path" ] || return 0
+  case "$SHELL" in *zsh) return 0 ;; esac
+
+  local me
+  me="$(id -un)"
+
+  info "setting login shell to $zsh_path"
+
+  if ! grep -qx "$zsh_path" /etc/shells 2>/dev/null
+  then
+    if [ "$(id -u)" = "0" ]
+    then
+      echo "$zsh_path" >> /etc/shells
+    else
+      echo "$zsh_path" | sudo tee -a /etc/shells >/dev/null
+    fi
+  fi
+
+  if chsh -s "$zsh_path" "$me" 2>/dev/null || sudo chsh -s "$zsh_path" "$me" 2>/dev/null
+  then
+    success "login shell is now $zsh_path"
+  else
+    warn "could not change the login shell, run: chsh -s $zsh_path"
+  fi
+}
+
 setup_oh_my_zsh () {
   info 'setup oh-my-zsh'
 
@@ -276,6 +328,8 @@ setup_oh_my_zsh () {
 }
 
 setup_gitconfig
+install_packages
+setup_login_shell
 setup_oh_my_zsh
 setup_vim
 install_dotfiles
