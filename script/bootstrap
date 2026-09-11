@@ -65,26 +65,68 @@ warn () {
   printf "\r  [${magenta}WARN${clear}] ${1}\n"
 }
 
+# Everything that names a local binary or app lives in ~/.gitconfig.local, not
+# in the public git/gitconfig.symlink, so a machine without VS Code, MacGPG2 or
+# a signing key still gets a working git.
 setup_gitconfig () {
-  if ! [ -f git/gitconfig.local.symlink ]
+  if [ -f git/gitconfig.local.symlink ]
   then
-    info 'setup gitconfig'
+    return
+  fi
 
-    git_credential='cache'
-    if [ "$(uname -s)" == "Darwin" ]
+  info 'setup gitconfig'
+
+  local git_credential='cache --timeout=3600'
+  local git_editor='vim'
+  local git_gpgsign='false'
+
+  if [ "$DOTFILES_OS" = "darwin" ]
+  then
+    git_credential='osxkeychain'
+    git_editor='code --wait'
+    git_gpgsign='true'
+  fi
+
+  local git_authorname="$GIT_AUTHORNAME"
+  local git_authoremail="$GIT_AUTHOREMAIL"
+  local git_signingkey="$GIT_SIGNINGKEY"
+
+  if [ -z "$git_authorname" ] || [ -z "$git_authoremail" ]
+  then
+    if [ "$DOTFILES_NONINTERACTIVE" = "1" ]
     then
-      git_credential='osxkeychain'
+      fail 'set GIT_AUTHORNAME and GIT_AUTHOREMAIL for a non-interactive run'
     fi
 
-    user ' - What is your git author name?'
-    read -e git_authorname
-    user ' - What is your git author email?'
-    read -e git_authoremail
+    if [ -z "$git_authorname" ]
+    then
+      user ' - What is your git author name?'
+      read -e git_authorname
+    fi
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
-
-    success 'gitconfig'
+    if [ -z "$git_authoremail" ]
+    then
+      user ' - What is your git author email?'
+      read -e git_authoremail
+    fi
   fi
+
+  sed -e "s/AUTHORNAME/$git_authorname/g" \
+      -e "s/AUTHOREMAIL/$git_authoremail/g" \
+      -e "s/GPG_SIGNINGKEY/$git_signingkey/g" \
+      -e "s/GIT_COMMIT_GPGSIGN/$git_gpgsign/g" \
+      -e "s|GIT_CREDENTIAL_HELPER|$git_credential|g" \
+      -e "s|GIT_EDITOR|$git_editor|g" \
+      git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
+
+  # An empty signingkey would make `git commit -S` fail with a confusing error
+  if [ -z "$git_signingkey" ]
+  then
+    sed -e '/signingkey =[[:space:]]*$/d' git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp
+    mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
+  fi
+
+  success 'gitconfig'
 }
 
 

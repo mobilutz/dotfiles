@@ -1,4 +1,30 @@
+# Per-machine git config, symlinked to ~/.gitconfig.local and included from
+# the BOTTOM of git/gitconfig.symlink, so everything here wins.
+#
+# script/bootstrap generates git/gitconfig.local.symlink from this file and
+# fills in the placeholders. The generated file is gitignored here; the real
+# one is versioned in the separate private repo (see README.local.md).
+
 [user]
-        name = AUTHORNAME
-        email = AUTHOREMAIL
-        signingkey = GPG_SIGNINGKEY
+	name = AUTHORNAME
+	email = AUTHOREMAIL
+	signingkey = GPG_SIGNINGKEY
+
+[commit]
+	# Signing needs a key in the agent, so this is off on machines without one
+	gpgsign = GIT_COMMIT_GPGSIGN
+
+[credential]
+	helper = GIT_CREDENTIAL_HELPER
+
+[core]
+	editor = GIT_EDITOR
+
+# Anything that names a local binary or app belongs here rather than in the
+# public config, e.g.
+#
+# [gpg]
+# 	program = /usr/local/bin/gpg
+#
+# [diff "spaceman-diff"]
+# 	command = /opt/homebrew/bin/spaceman-diff
