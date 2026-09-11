@@ -25,8 +25,8 @@ OS-suffixed file over a `uname` guard inside a shared one.
 
 ## Key Scripts
 
-- **`script/bootstrap`** — Full initial setup (prompts for git author, installs Oh My Zsh, creates symlinks, runs `dot`)
-- **`bin/dot`** — Ongoing maintenance: pulls latest, runs `brew bundle`, executes all `install.sh` scripts
+- **`script/bootstrap`** — Full initial setup (prompts for git author, installs Oh My Zsh, creates symlinks, runs `dot`). `DOTFILES_NONINTERACTIVE=1` plus `GIT_AUTHORNAME`/`GIT_AUTHOREMAIL` (and optional `GIT_SIGNINGKEY`) runs it unattended
+- **`bin/dot`** — Ongoing maintenance: pulls latest, then `brew bundle` (macOS) or apt + `linux/packages.txt` (Linux), executes all `install.sh` scripts. `--pull-only` pulls and stops
 - **`script/install`** — Finds and runs every `*/install.sh` and `*/install.$DOTFILES_OS.sh` in the repo
 
 ## Shell Loading Order
@@ -53,7 +53,7 @@ Defined in `zsh/zshrc.symlink`:
 ## Making Changes
 
 - **Adding a new topic**: Create a directory, add `.zsh` files for aliases/config, `.symlink` files for dotfiles, and optionally `install.sh` for setup. Add the `.darwin`/`.linux` segment when the topic is platform-specific
-- **Adding packages**: Edit `Brewfile` (Homebrew manages all packages via `brew bundle`)
+- **Adding packages**: Edit `Brewfile` for macOS (via `brew bundle`) and `linux/packages.txt` for Debian/Raspberry Pi OS (via `linux/install.linux.sh`)
 - **Adding shell aliases**: Add to the relevant `topic/aliases.zsh` file
 - **Adding functions**: Place in `functions/` directory (auto-loaded via `autoload -U`)
 - **Machine-specific config**: Use `~/.localrc` or `~/.zshrc.local` (never committed)

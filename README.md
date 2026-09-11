@@ -80,7 +80,28 @@ which sets up a few paths that'll be different on your particular machine.
 `dot` is a simple script that installs some dependencies, sets sane macOS
 defaults, and so on. Tweak this script, and occasionally run `dot` from
 time to time to keep your environment fresh and up-to-date. You can find
-this script in `bin/`.
+this script in `bin/`. On macOS it drives Homebrew and the `Brewfile`; on
+Linux it drives apt and `linux/packages.txt`. `dot --pull-only` just pulls
+the repo, for unattended fleet updates.
+
+### unattended install
+
+`script/bootstrap` normally asks for the git identity and what to do about
+each conflicting dotfile. Set `DOTFILES_NONINTERACTIVE=1` and it answers both
+from the environment instead - this is how a Raspberry Pi gets provisioned
+over ssh:
+
+```sh
+git clone https://github.com/mobilutz/dotfiles.git ~/.dotfiles
+DOTFILES_NONINTERACTIVE=1 \
+GIT_AUTHORNAME="Your Name" \
+GIT_AUTHOREMAIL="you@example.com" \
+~/.dotfiles/script/bootstrap
+```
+
+`GIT_SIGNINGKEY` is optional; without it the generated `~/.gitconfig.local`
+has no signing key and leaves commit signing off. Conflicting dotfiles are
+overwritten rather than prompted for.
 
 ## private config
 

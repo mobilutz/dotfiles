@@ -1,0 +1,32 @@
+# apt counterpart of the Brewfile: what these dotfiles need on a Debian or
+# Raspberry Pi OS machine. One package per line, # starts a comment.
+#
+# Installed by linux/install.linux.sh, which skips whatever is already there.
+
+# The shell itself
+zsh
+zsh-syntax-highlighting
+zsh-autosuggestions
+
+# Needed by script/bootstrap and bin/dot
+git
+curl
+ca-certificates
+
+# Editor and the tools the aliases and bin/ scripts call
+vim
+ack
+tree
+ripgrep
+jq
+htop
+
+# `pubkey` copies to the clipboard when there is a display
+xclip
+
+# eza is only packaged from Debian 13 (trixie) on. On bookworm the install
+# script skips it and `ls` falls back to GNU coreutils, which `ll` rides on.
+eza
+
+# For the MQTT scripts running on these Pis
+python3-paho-mqtt

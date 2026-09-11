@@ -1,16 +1,27 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # dot
 #
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
+#
+# Bash, not sh: script/bootstrap sources this from bash, and Debian's /bin/sh
+# is dash, which has no BASH_SOURCE.
 
 set -e
 
 force=false
 freshInstall=false
+pullOnly=false
 parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "${parentDirectory}" )" && pwd -P)"
+
+case "$(uname -s)" in
+	Darwin) DOTFILES_OS=darwin ;;
+	Linux)  DOTFILES_OS=linux ;;
+	*)      DOTFILES_OS="$(uname -s | tr '[:upper:]' '[:lower:]')" ;;
+esac
+export DOTFILES_OS
 
 displayUsageAndExit() {
 	echo "dot -- dotfiles management"
@@ -18,9 +29,10 @@ displayUsageAndExit() {
 	echo "Usage: dot [options]"
 	echo ""
 	echo "Options:"
-	echo "  -f, --force   Force initialization (not skipping setup)"
-	echo "  -e, --edit    Open dotfiles directory for editing"
-	echo "  -h, --help    Show this help message and exit"
+	echo "  -f, --force       Force initialization (not skipping setup)"
+	echo "  -e, --edit        Open dotfiles directory for editing"
+	echo "  -p, --pull-only   Only pull the repo, install nothing"
+	echo "  -h, --help        Show this help message and exit"
 	exit
 }
 
@@ -35,6 +47,9 @@ while test $# -gt 0; do
 			;;
 		"-f"|"--force")
 			force=true
+			;;
+		"-p"|"--pull-only")
+			pullOnly=true
 			;;
 		*)
 			echo "Invalid option: $1"
@@ -54,29 +69,46 @@ export DOTZSH=$HOME/.dotfiles
 echo "› git pull"
 git -C $DOTZSH pull
 
-if [ ${freshInstall} = 'true' ]; then
-	# Set macOS hostname
-	echo "› setup-hostname"
-	$DOTZSH/macos/set-hostname.sh
-
-	# Install homebrew
-	echo "› install homebrew"
-	$DOTZSH/homebrew/install.darwin.sh 2>&1
-
-	# Set macOS defaults
-	echo "› set mac defaults"
-	$DOTZSH/macos/set-defaults.sh
+# For unattended fleet updates: take the new files, install nothing
+if [ ${pullOnly} = 'true' ]; then
+	exit 0
 fi
 
-# Upgrade homebrew
-echo "› brew update"
-brew update
+if [ "$DOTFILES_OS" = "darwin" ]; then
+	if [ ${freshInstall} = 'true' ]; then
+		# Set macOS hostname
+		echo "› setup-hostname"
+		$DOTZSH/macos/set-hostname.sh
 
-echo "› brew upgrade"
-brew upgrade --no-ask
+		# Install homebrew
+		echo "› install homebrew"
+		$DOTZSH/homebrew/install.darwin.sh 2>&1
 
-echo "› brew bundle"
-brew bundle --file $DOTZSH/Brewfile
+		# Set macOS defaults
+		echo "› set mac defaults"
+		$DOTZSH/macos/set-defaults.sh
+	fi
+
+	# Upgrade homebrew
+	echo "› brew update"
+	brew update
+
+	echo "› brew upgrade"
+	brew upgrade --no-ask
+
+	echo "› brew bundle"
+	brew bundle --file $DOTZSH/Brewfile
+else
+	echo "› apt-get update"
+	if [ "$(id -u)" = "0" ]; then
+		apt-get update
+	else
+		sudo apt-get update
+	fi
+
+	echo "› linux packages"
+	$DOTZSH/linux/install.linux.sh
+fi
 
 if [ ${freshInstall} = 'true' ]; then
 	# Install software
