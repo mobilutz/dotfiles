@@ -112,7 +112,14 @@ zstyle :omz:plugins:ssh-agent ssh-add-args -q
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(brew git heroku ruby ssh-agent vscode yarn z zsh-autosuggestions)
+# brew, heroku, vscode and yarn have nothing to complete on a Raspberry Pi.
+# zsh-autosuggestions is the custom clone script/bootstrap makes on both.
+if [[ $DOTFILES_OS == darwin ]]
+then
+  plugins=(brew git heroku ruby ssh-agent vscode yarn z zsh-autosuggestions)
+else
+  plugins=(git ruby ssh-agent z zsh-autosuggestions)
+fi
 
 source $ZSH/oh-my-zsh.sh
 

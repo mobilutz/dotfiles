@@ -2,11 +2,17 @@ alias reload!='. ~/.zshrc'
 
 alias cls='clear' # Good 'ol Clear Screen command
 # alias cat='bat'
-alias ls='eza'
+
+# eza is a nicer ls but is not packaged before Debian 13. Without it `ls` keeps
+# whatever system/aliases.zsh resolved it to, and `ll` rides on either.
+(( $+commands[eza] )) && alias ls='eza'
 alias ll='ls -ahl'
 
-alias zshconfig="code ~/.zshrc"
-alias ohmyzsh="code ~/.oh-my-zsh"
+if (( $+commands[code] ))
+then
+  alias zshconfig="code ~/.zshrc"
+  alias ohmyzsh="code ~/.oh-my-zsh"
+fi
 
 alias biggest="du -skh * | sort -hr | head -11"
 
@@ -33,10 +39,15 @@ alias be='bundle exec'
 alias bi='bundle install'
 alias bu='bundle update'
 
-alias et='code'
-alias c='code'
+if (( $+commands[code] ))
+then
+  alias et='code'
+  # Without VS Code this leaves the `c` project-jump function from functions/c
+  # in place.
+  alias c='code'
+fi
 
-alias homebrew='brew'
+(( $+commands[brew] )) && alias homebrew='brew'
 
 alias listen="sudo lsof -i -P | grep -i \"listen\""
 
