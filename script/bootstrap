@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 #
 # bootstrap installs things.
+#
+# Unattended run (e.g. a Raspberry Pi provisioned over ssh):
+#
+#   DOTFILES_NONINTERACTIVE=1 \
+#   GIT_AUTHORNAME="Your Name" \
+#   GIT_AUTHOREMAIL="you@example.com" \
+#   script/bootstrap
+#
+# That answers both questions up front and overwrites conflicting dotfiles
+# instead of asking per file. GIT_SIGNINGKEY is optional; without it the
+# generated ~/.gitconfig.local has no signing key and leaves signing off.
 
 # Synology Drive
 # - Alfred Settings Copy -> Through Synology Drive
@@ -210,6 +221,12 @@ install_dotfiles () {
 
   local overwrite_all=false backup_all=false skip_all=false
 
+  # Nobody is there to answer the per-file prompt on a fleet of Pis
+  if [ "$DOTFILES_NONINTERACTIVE" = "1" ]
+  then
+    overwrite_all=true
+  fi
+
   for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
   do
     local name="$(basename "${src%.symlink}")"
@@ -231,20 +248,31 @@ setup_vim () {
   mkdir -p ~/.vim/backups
   mkdir -p ~/.vim/swaps
   mkdir -p ~/.vim/undo
-
   mkdir -p ~/.vim/pack/tpope/start
-  cd ~/.vim/pack/tpope/start
-  git clone https://tpope.io/vim/sensible.git
+
+  # No `cd`: it used to leave the rest of the script in ~/.vim
+  if [ ! -d ~/.vim/pack/tpope/start/sensible ]
+  then
+    git clone https://tpope.io/vim/sensible.git ~/.vim/pack/tpope/start/sensible
+  fi
 }
 
 setup_oh_my_zsh () {
   info 'setup oh-my-zsh'
 
-  mkdir -p ~/.oh-my-zsh/custom/themes
-  mkdir -p ~/.oh-my-zsh/custom/plugins
-  custom_dir=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
-  [ -d $custom_dir/themes/powerlevel10k ] || git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-  [ -d $custom_dir/plugins/zsh-autosuggestions ] || git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  # zshrc.symlink is useless without the framework, and on a fresh Pi nothing
+  # else installs it. --keep-zshrc so the installer leaves our ~/.zshrc alone.
+  if [ ! -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]
+  then
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
+  fi
+
+  local custom_dir=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
+  mkdir -p "$custom_dir/themes"
+  mkdir -p "$custom_dir/plugins"
+
+  [ -d "$custom_dir/themes/powerlevel10k" ] || git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$custom_dir/themes/powerlevel10k"
+  [ -d "$custom_dir/plugins/zsh-autosuggestions" ] || git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$custom_dir/plugins/zsh-autosuggestions"
 }
 
 setup_gitconfig
@@ -252,17 +280,13 @@ setup_oh_my_zsh
 setup_vim
 install_dotfiles
 
-
-# If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
+# bin/dot knows what a dependency is on each platform
+info "installing dependencies"
+if source bin/dot | while read -r data; do info "$data"; done
 then
-  info "installing dependencies"
-  if source bin/dot | while read -r data; do info "$data"; done
-  then
-    success "dependencies installed"
-  else
-    fail "error installing dependencies"
-  fi
+  success "dependencies installed"
+else
+  fail "error installing dependencies"
 fi
 
 echo ''
