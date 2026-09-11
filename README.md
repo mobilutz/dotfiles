@@ -46,6 +46,21 @@ There's a few special files in the hierarchy.
   but still keep those autoloaded files in your home directory. These get
   symlinked in when you run `script/bootstrap`.
 
+These dotfiles run on macOS and on Debian/Raspberry Pi OS. An extra `.darwin`
+or `.linux` segment in front of the usual extension restricts a file to one
+platform; `$DOTFILES_OS` holds `darwin` or `linux`.
+
+- **topic/\*.darwin.zsh**, **topic/\*.linux.zsh**: loaded only on that OS.
+  Works for `path.<os>.zsh` and `completion.<os>.zsh` too, which keep their
+  first/last position in the load order.
+- **topic/install.darwin.sh**, **topic/install.linux.sh**: run by
+  `script/install` only on that OS.
+- **topic/foo.darwin.symlink**, **topic/foo.linux.symlink**: symlinked only on
+  that OS, and both land on `~/.foo` — the OS segment is stripped.
+
+Prefer these over an `if [ "$(uname -s)" ]` guard inside a shared file: the
+filename says who it is for and `ls`/`grep` can find it.
+
 ## install
 
 Run this:

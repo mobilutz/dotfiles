@@ -22,7 +22,7 @@ TARGET_NAME="HomeNet"
 # dns.sh switches between them by name, dns-switch.sh enforces TARGET_PROFILE
 # on the home network. "Empty" hands control back to DHCP.
 #
-# Add a profile here and rerun network/install.sh so the sudoers rule covers it.
+# Add a profile here and rerun network/install.darwin.sh so the sudoers rule covers it.
 DNS_PROFILE_home="192.0.2.10 192.0.2.1 1.1.1.1"
 DNS_PROFILE_ph="192.0.2.10"
 DNS_PROFILE_cf="1.1.1.1 1.0.0.1"

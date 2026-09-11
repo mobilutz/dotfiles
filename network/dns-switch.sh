@@ -139,7 +139,7 @@ if networksetup -setdnsservers "$SERVICE" "${WANT[@]}" 2>/dev/null; then
 elif sudo -n networksetup -setdnsservers "$SERVICE" "${WANT[@]}" 2>/dev/null; then
   :
 else
-  log "net=$NET - FAILED to set DNS (needs admin rights; rerun network/install.sh for the sudoers rule)"
+  log "net=$NET - FAILED to set DNS (needs admin rights; rerun network/install.darwin.sh for the sudoers rule)"
   notify "$NET: FAILED to set DNS - needs admin rights"
   exit 1
 fi

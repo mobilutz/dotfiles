@@ -1,6 +1,12 @@
-# Brew prefix
-# BREW_PREFIX=$(brew --prefix)
-BREW_PREFIX="/opt/homebrew"
+# Which OS are we on. Topic files can target a single platform by carrying an
+# OS segment in their name: foo.darwin.zsh, install.linux.sh,
+# gitconfig.linux.symlink. See README.md under "components".
+case "$(uname -s)" in
+  Darwin) DOTFILES_OS=darwin ;;
+  Linux)  DOTFILES_OS=linux ;;
+  *)      DOTFILES_OS="$(uname -s | tr '[:upper:]' '[:lower:]')" ;;
+esac
+export DOTFILES_OS
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -127,10 +133,6 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-export EDITOR="${BREW_PREFIX}/bin/code -w"
-export BUNLDER_EDITOR="${BREW_PREFIX}/bin/code -w"
-export GEM_OPEN_EDITOR="${BREW_PREFIX}/bin/code -w"
-
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
@@ -152,28 +154,31 @@ export DISABLE_UPDATE_PROMPT=true
 typeset -U config_files
 config_files=($DOTZSH/**/*.zsh)
 
+# drop the topic files that target a different OS
+for os in darwin linux
+do
+  [[ $os == $DOTFILES_OS ]] || config_files=(${config_files:#*.$os.zsh})
+done
+
 # load the path files
-for file in ${(M)config_files:#*/path.zsh}
+for file in ${(M)config_files:#*/path(|.$DOTFILES_OS).zsh}
 do
   source $file
 done
 
 # load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+for file in ${${config_files:#*/path(|.$DOTFILES_OS).zsh}:#*/completion(|.$DOTFILES_OS).zsh}
 do
   source $file
 done
 
 # load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}
+for file in ${(M)config_files:#*/completion(|.$DOTFILES_OS).zsh}
 do
   source $file
 done
 
 unset config_files
-
-
-. ${BREW_PREFIX}/etc/profile.d/z.sh
 
 
 # set the file open limit higher
@@ -185,23 +190,15 @@ ulimit -n 4096
 # For GPG to work
 export GPG_TTY=$(tty)
 
-# brew install zsh-syntax-highlighting
-source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# heroku autocomplete setup
-HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
-
 # mise Version manager
-eval "$(mise activate zsh)"
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
 
-source ~/.zshrc.local
+# Machine-local overrides: secrets, work identity, anything that must not be
+# committed. Never present on the Raspberry Pis, hence the guard.
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=${GITHUB_TOKEN}:x-oauth-basic
 export BUNDLE_GITHUB__COM=x-access-token:${GITHUB_TOKEN}
-
-# # Google Cloud SDK
-# source "${BREW_PREFIX}/share/google-cloud-sdk/path.zsh.inc"
-# source "${BREW_PREFIX}/share/google-cloud-sdk/completion.zsh.inc"
 
 # Compose bins
 # export PATH="$PATH:$HOME/.composer/vendor/bin"
@@ -219,3 +216,15 @@ export HELM_EXPERIMENTAL_OCI=1
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+
+# zsh-syntax-highlighting wraps the ZLE widgets that exist when it is sourced,
+# so it must come after every other plugin and keybinding. Homebrew ships it
+# under share/, Debian under /usr/share/.
+for _syntax_highlighting in \
+  /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+do
+  [[ -r $_syntax_highlighting ]] && source $_syntax_highlighting && break
+done
+unset _syntax_highlighting

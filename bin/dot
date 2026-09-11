@@ -61,7 +61,7 @@ if [ ${freshInstall} = 'true' ]; then
 
 	# Install homebrew
 	echo "› install homebrew"
-	$DOTZSH/homebrew/install.sh 2>&1
+	$DOTZSH/homebrew/install.darwin.sh 2>&1
 
 	# Set macOS defaults
 	echo "› set mac defaults"

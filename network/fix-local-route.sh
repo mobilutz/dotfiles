@@ -78,7 +78,7 @@ fi
 if sudo -n /sbin/route delete "$BAD_ROUTE" >>"$LOG" 2>&1; then
   log "deleted $BAD_ROUTE"
 else
-  log "FAILED to delete $BAD_ROUTE (needs the sudoers rule from network/install.sh)"
+  log "FAILED to delete $BAD_ROUTE (needs the sudoers rule from network/install.darwin.sh)"
   exit 1
 fi
 

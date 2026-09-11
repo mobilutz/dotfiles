@@ -266,7 +266,7 @@ defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
 # Screenshot defaults (location, type, thumbnail, shadow) live in the
-# screenshots/ topic — see screenshots/install.sh.
+# screenshots/ topic — see screenshots/install.darwin.sh.
 
 # Enable subpixel font rendering on non-Apple LCDs
 # Reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501

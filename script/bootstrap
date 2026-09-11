@@ -31,6 +31,16 @@ DOTFILES_ROOT=$(pwd -P)
 
 set -e
 
+# Which OS are we on. Topic files can target a single platform by carrying an
+# OS segment in their name: foo.darwin.zsh, install.linux.sh,
+# gitconfig.linux.symlink. See README.md under "components".
+case "$(uname -s)" in
+  Darwin) DOTFILES_OS=darwin ;;
+  Linux)  DOTFILES_OS=linux ;;
+  *)      DOTFILES_OS="$(uname -s | tr '[:upper:]' '[:lower:]')" ;;
+esac
+export DOTFILES_OS
+
 echo ''
 
 info () {
@@ -160,8 +170,16 @@ install_dotfiles () {
 
   for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
   do
-    dst="$HOME/.$(basename "${src%.*}")"
-    link_file "$src" "$dst"
+    local name="$(basename "${src%.symlink}")"
+
+    # foo.darwin.symlink and foo.linux.symlink both land on ~/.foo, but only
+    # on the OS they name.
+    case "$name" in
+      *.darwin) [ "$DOTFILES_OS" = "darwin" ] || continue; name="${name%.darwin}" ;;
+      *.linux)  [ "$DOTFILES_OS" = "linux" ]  || continue; name="${name%.linux}" ;;
+    esac
+
+    link_file "$src" "$HOME/.$name"
   done
 }
 

@@ -41,19 +41,8 @@ bindkey '^?' backward-delete-char
 # Automatic OhMyZSH Update
 export DISABLE_UPDATE_PROMPT=true
 
-# BREW_PREFIX=$(brew --prefix)
-BREW_PREFIX=/opt/homebrew
-
-. ${BREW_PREFIX}/etc/profile.d/z.sh
-
-# For GPG to work
-export GPG_TTY=$(tty)
-
-# brew install zsh-syntax-highlighting
-source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# heroku autocomplete setup
-HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
+# BREW_PREFIX, z, heroku autocomplete live in homebrew/brew.darwin.zsh.
+# GPG_TTY and zsh-syntax-highlighting live in zsh/zshrc.symlink.
 
 # 1Password GitHub Integration
 # https://developer.1password.com/docs/cli/shell-plugins/github/

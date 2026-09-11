@@ -70,7 +70,7 @@ apply_dns() {
   elif sudo -n networksetup -setdnsservers "$SERVICE" "${servers[@]}" 2>/dev/null; then
     :
   else
-    echo "dns: failed to set DNS, needs admin rights - rerun network/install.sh" >&2
+    echo "dns: failed to set DNS, needs admin rights - rerun network/install.darwin.sh" >&2
     return 1
   fi
   dscacheutil -flushcache 2>/dev/null

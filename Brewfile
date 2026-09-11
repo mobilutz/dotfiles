@@ -147,7 +147,7 @@ cask 'whatcable'
 cask 'whatsapp'
 cask 'wifiman'
 cask 'zed'
-cask 'zettlr' # Markdown editor, default handler wired in macos/install.sh
+cask 'zettlr' # Markdown editor, default handler wired in macos/install.darwin.sh
 cask 'zoom'
 
 mas '1password for safari', id: 1569813296

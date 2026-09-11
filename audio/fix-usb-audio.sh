@@ -82,7 +82,7 @@ restart_daemon() {
     return 1
   fi
   if ! sudo -n /usr/bin/killall "$daemon" >>"$LOG" 2>&1; then
-    log "FAILED to restart $daemon (needs the sudoers rule from audio/install.sh)"
+    log "FAILED to restart $daemon (needs the sudoers rule from audio/install.darwin.sh)"
     return 1
   fi
   log "restarted $daemon"

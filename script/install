@@ -6,5 +6,13 @@ set -e
 
 cd "$(dirname $0)"/..
 
-# find the installers and run them iteratively
-find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+case "$(uname -s)" in
+  Darwin) DOTFILES_OS=darwin ;;
+  Linux)  DOTFILES_OS=linux ;;
+  *)      DOTFILES_OS="$(uname -s | tr '[:upper:]' '[:lower:]')" ;;
+esac
+export DOTFILES_OS
+
+# install.sh runs everywhere; install.<os>.sh only on the OS it names
+find . \( -name install.sh -o -name "install.${DOTFILES_OS}.sh" \) \
+  | while read installer ; do sh -c "${installer}" ; done

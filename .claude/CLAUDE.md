@@ -16,11 +16,18 @@ Files within each topic directory follow naming conventions that determine how t
 - `topic/*.symlink` — Symlinked to `$HOME` as dotfiles (e.g., `git/gitconfig.symlink` → `~/.gitconfig`)
 - `topic/install.sh` — Run by `script/install` during setup
 
+Cross-platform: this repo targets macOS **and** Debian/Raspberry Pi OS.
+`$DOTFILES_OS` is `darwin` or `linux`. An extra OS segment restricts a file to
+one platform — `topic/*.darwin.zsh` / `topic/*.linux.zsh` (also works for
+`path.<os>.zsh` and `completion.<os>.zsh`), `topic/install.<os>.sh`, and
+`topic/foo.<os>.symlink` (which still lands on `~/.foo`). Prefer a new
+OS-suffixed file over a `uname` guard inside a shared one.
+
 ## Key Scripts
 
 - **`script/bootstrap`** — Full initial setup (prompts for git author, installs Oh My Zsh, creates symlinks, runs `dot`)
 - **`bin/dot`** — Ongoing maintenance: pulls latest, runs `brew bundle`, executes all `install.sh` scripts
-- **`script/install`** — Finds and runs every `*/install.sh` in the repo
+- **`script/install`** — Finds and runs every `*/install.sh` and `*/install.$DOTFILES_OS.sh` in the repo
 
 ## Shell Loading Order
 
@@ -38,13 +45,14 @@ Defined in `zsh/zshrc.symlink`:
 
 - `$DOTZSH` → `~/.dotfiles` (this repo)
 - `$PROJECTS` → `~/code`
-- `$BREW_PREFIX` → `/opt/homebrew`
+- `$BREW_PREFIX` → `/opt/homebrew` (macOS only, set by `homebrew/brew.darwin.zsh`)
+- `$DOTFILES_OS` → `darwin` or `linux`
 - `bin/` directory is added to `$PATH`
 - Primary editor: VS Code (`code`)
 
 ## Making Changes
 
-- **Adding a new topic**: Create a directory, add `.zsh` files for aliases/config, `.symlink` files for dotfiles, and optionally `install.sh` for setup
+- **Adding a new topic**: Create a directory, add `.zsh` files for aliases/config, `.symlink` files for dotfiles, and optionally `install.sh` for setup. Add the `.darwin`/`.linux` segment when the topic is platform-specific
 - **Adding packages**: Edit `Brewfile` (Homebrew manages all packages via `brew bundle`)
 - **Adding shell aliases**: Add to the relevant `topic/aliases.zsh` file
 - **Adding functions**: Place in `functions/` directory (auto-loaded via `autoload -U`)
