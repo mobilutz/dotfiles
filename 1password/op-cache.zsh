@@ -16,6 +16,11 @@ zmodload -F zsh/stat b:zstat
 export OP_CACHE_DIR=${OP_CACHE_DIR:-$HOME/.cache/op}
 export OP_CACHE_TTL=${OP_CACHE_TTL:-$((7 * 24 * 3600))}
 
+# How long a failed read is remembered. A reference that does not resolve --
+# wrong account, renamed item, revoked token -- otherwise caches nothing, so
+# every new shell calls op again and raises the authorization dialog again.
+export OP_CACHE_FAIL_TTL=${OP_CACHE_FAIL_TTL:-3600}
+
 # op_cached_read <cache-name> <op://uri> [extra op args...]
 #
 # Prints the secret on stdout. Serves a fresh cache without touching op at all.
@@ -23,6 +28,10 @@ export OP_CACHE_TTL=${OP_CACHE_TTL:-$((7 * 24 * 3600))}
 # unavailable (not installed, offline, vault locked) it falls back to a stale
 # cache rather than returning nothing, so a locked vault degrades to an old
 # token instead of an empty one.
+#
+# A failed read is remembered in <name>.fail for OP_CACHE_FAIL_TTL and warns
+# once, so a broken reference backs off instead of prompting on every shell.
+# `op_cache_clear <name>` drops the marker and retries immediately.
 #
 # Refuses to run when stdout is a terminal, so typing the command by hand
 # cannot spill a secret into the scrollback, a screen share or a transcript.
@@ -57,16 +66,30 @@ op_cached_read() {
     return
   fi
 
+  local fail=$file.fail
+  local -a fail_mtime
+
+  if [[ -f $fail ]] && zstat -A fail_mtime +mtime -- $fail 2>/dev/null &&
+     (( EPOCHSECONDS - fail_mtime[1] < OP_CACHE_FAIL_TTL )); then
+    [[ -s $file ]] && print -r -- "$(<$file)"
+    return
+  fi
+
   local secret
   secret=$(op read "$uri" "$@" 2>/dev/null)
 
+  mkdir -p $OP_CACHE_DIR
+  chmod 700 $OP_CACHE_DIR
+
   if [[ -n $secret ]]; then
-    mkdir -p $OP_CACHE_DIR
-    chmod 700 $OP_CACHE_DIR
     ( umask 077; print -r -- "$secret" > $file )
+    rm -f -- $fail
     print -r -- "$secret"
-  elif [[ -s $file ]]; then
-    print -r -- "$(<$file)"
+  else
+    : > $fail
+    print -u2 -- "op_cached_read: $name did not resolve ($uri)"
+    print -u2 -- "  retrying in $(( OP_CACHE_FAIL_TTL / 60 ))m; force now with: op_cache_clear $name"
+    [[ -s $file ]] && print -r -- "$(<$file)"
   fi
 }
 
@@ -75,7 +98,7 @@ op_cached_read() {
 op_cache_clear() {
   if (( $# )); then
     local name
-    for name in "$@"; do rm -f -- $OP_CACHE_DIR/$name; done
+    for name in "$@"; do rm -f -- $OP_CACHE_DIR/$name $OP_CACHE_DIR/$name.fail; done
   else
     rm -f -- $OP_CACHE_DIR/*(N)
   fi

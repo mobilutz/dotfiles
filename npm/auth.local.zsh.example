@@ -5,8 +5,12 @@
 # before npm/yarn runs. Interactive shells only; never block startup.
 # op_cached_read (1password/op-cache.zsh) caches the resolved secrets on disk so
 # a new terminal window does not raise a 1Password authorization prompt.
+#
+# Pass --account when you are signed in to more than one 1Password account:
+# without it op picks the default account, an item lookup in the wrong account
+# fails, nothing gets cached, and the prompt returns on every single shell.
 if [[ -o interactive ]] && (( $+functions[op_cached_read] )); then
-  : ${NPM_GITHUB_TOKEN:=$(op_cached_read npm-github-pat "op://<VAULT>/<ITEM>/<FIELD>")}
-  : ${NPM_TOKEN:=$(op_cached_read npmjs-pat "op://<VAULT>/<ITEM>/<FIELD>")}
+  : ${NPM_GITHUB_TOKEN:=$(op_cached_read npm-github-pat "op://<VAULT>/<ITEM>/<FIELD>" --account <YOUR_ACCOUNT>.1password.com)}
+  : ${NPM_TOKEN:=$(op_cached_read npmjs-pat "op://<VAULT>/<ITEM>/<FIELD>" --account <YOUR_ACCOUNT>.1password.com)}
   export NPM_GITHUB_TOKEN NPM_TOKEN
 fi
