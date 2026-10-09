@@ -12,6 +12,10 @@
 #
 # Any other invocation passes straight through to the real `code` binary.
 
+# Non-interactive shells (e.g. Claude Code's `!` prefix) may run with
+# bareglobqual off, which breaks the (N) glob qualifier below.
+emulate -L zsh
+
 (( $+functions[_code_pre_open] )) && _code_pre_open "${@[-1]:-.}"
 
 if [[ "$1" == "." && $# -eq 1 ]]; then
