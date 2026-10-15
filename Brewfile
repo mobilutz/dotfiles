@@ -20,13 +20,13 @@ brew 'duti' # assigns default apps to file types
 brew 'esphome'
 brew 'esptool'
 brew 'eza'
-brew 'gatsby-cli'
+# brew 'gatsby-cli' # use gatsby via mise or npx
 brew 'gh'
 brew 'git'
 brew 'git-secrets'
 brew 'gitleaks'
 brew 'helm'
-brew 'heroku'
+# brew 'heroku' # 2026-10-15 Not needed anymore, no heroku app development anymore
 brew 'hugo'
 brew 'htop'
 brew 'imagemagick'
@@ -50,6 +50,7 @@ brew 'pipx'
 brew 'postgresql' # needed for ruby pg gem install
 brew 'puma/puma/puma-dev'
 # brew 'rbenv' # -> use mise
+brew 'rclone'
 brew 'semgrep' # https://semgrep.dev/
 brew 'shpotify'
 brew 'sleepwatcher'
@@ -69,9 +70,8 @@ cask 'alfred' # Alfred Settings are stored in Synology Drive -> Documents/MacSet
 cask 'anydesk'
 cask 'betterdisplay'
 cask 'brave-browser'
-cask 'bruno' # Postman Alternative
+# cask 'bruno' # Postman Alternative - 2026-10-15 not used
 # cask 'chatall' # Is not working
-# cask 'cheatsheet' # Does not exist anymore
 cask 'cisdem-duplicate-finder'
 cask 'cleanmymac'
 cask 'claude'
@@ -115,7 +115,7 @@ cask 'microsoft-word'
 cask 'minecraft'
 cask 'mongodb-compass'
 cask 'mqtt-explorer'
-cask 'openlogi'
+# cask 'openlogi' # 2026-10-15 not needed right now, using logi-options+ and logitune
 cask 'opera'
 # cask 'osxfuse' # Does not work with macOS >= 14
 cask 'path-finder'
@@ -127,7 +127,7 @@ cask 'qlmarkdown' # Markdown Viewer for finder
 cask 'rapidapi'
 cask 'raspberry-pi-imager'
 cask 'rectangle'
-cask 'roblox'
+# cask 'roblox' # 2026-10-15 not using roblox anymore
 cask 'rsyncui'
 cask 'sequel-ace'
 cask 'signal'
@@ -138,11 +138,11 @@ cask 'synology-drive'
 cask 'synology-note-station-client'
 cask 'telegram'
 # cask 'ticktick' # Test Alternative to Microsoft To Do, but it does not work with priority that we use
-cask 'todoist-app'
-cask 'tower'
+# cask 'todoist-app' # 2026-10-15 not needed right now, using Microsoft To Do
+# cask 'tower' # 2026-10-15 not needed right now, using git via vscode
 cask 'visual-studio-code'
 cask 'vlc'
-cask 'vscodium'
+# cask 'vscodium' # 2026-10-15 not needed right now
 cask 'whatcable'
 cask 'whatsapp'
 cask 'wifiman'
