@@ -1,6 +1,6 @@
 #!/bin/bash
 # dns-switch.sh - set DNS based on which network we are actually attached to.
-# Triggered by the LaunchAgent com.local.dnsswitch on every network change.
+# Triggered by the LaunchAgent com.user.dnsswitch on every network change.
 #
 # The network is identified by the MAC address of the default gateway, not by
 # SSID: recent macOS versions return the literal string "<redacted>" from

@@ -7,9 +7,10 @@
 # symlinks each tracked file into the correct location under `~/.claude/`.
 #
 # `settings.json` is the exception: it is generated, not linked, by merging the
-# public settings in this repo with the `settings.local.json` overlay from the
-# separate ~/.dotfiles-private repo. That keeps work-specific entries (private
-# plugin marketplaces and the plugins from them) out of this public repo.
+# public settings in this repo with the `settings.local.json` overlay next to
+# them. The overlay matches `*.local.*`, so it is ignored here; it is a link
+# into the nested private repo (see script/link-private). That keeps work-specific entries
+# (private plugin marketplaces and the plugins from them) out of this public repo.
 #
 # Note that Claude Code itself does not read a `settings.local.json` next to
 # `~/.claude/settings.json` — its `local` tier is per-project
@@ -20,7 +21,7 @@ set -e
 
 DOTFILES_CLAUDE="$(cd "$(dirname "$0")" && pwd -P)"
 TARGET="$HOME/.claude"
-LOCAL_SETTINGS="$HOME/.dotfiles-private/claude/settings.local.json"
+LOCAL_SETTINGS="$DOTFILES_CLAUDE/settings.local.json"
 SETTINGS_SNAPSHOT="$TARGET/.settings.generated.json"
 
 mkdir -p "$TARGET/agents"
@@ -91,5 +92,5 @@ done
 shopt -u nullglob
 
 if [ ! -f "$LOCAL_SETTINGS" ]; then
-  echo "  [WARN] no $LOCAL_SETTINGS — copy claude/settings.local.json.example there for work-specific settings"
+  echo "  [WARN] no $LOCAL_SETTINGS — copy settings.local.json.example to it for work-specific settings"
 fi

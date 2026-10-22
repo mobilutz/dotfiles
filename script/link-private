@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+# Links every file of the nested private repo (private/) back to the same
+# relative path in this public tree, e.g.
+#
+#   zsh/zshrc.local.symlink -> ../private/zsh/zshrc.local.symlink
+#
+# so scripts, bootstrap and Claude Code find private files where they always
+# were. The links match *.local.* (or another public ignore rule), so the
+# public repo never sees them. .claude/plans is linked as a whole directory,
+# so new plans land in the private repo automatically.
+#
+# A real file is only replaced when it is identical to its private copy;
+# otherwise the script reports the difference and leaves it alone.
+
+set -e
+
+DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd -P)"
+PRIVATE="$DOTFILES_ROOT/private"
+
+if [ ! -d "$PRIVATE/.git" ]
+then
+  echo "  [SKIP] no private repo at $PRIVATE"
+  exit 0
+fi
+
+# Relative link target for <rel>: one ../ per directory level, then private/
+link_target () {
+  dir="$(dirname "$1")"
+  if [ "$dir" = "." ]
+  then
+    echo "private/$1"
+  else
+    echo "$(echo "$dir" | sed 's|[^/][^/]*|..|g')/private/$1"
+  fi
+}
+
+link () {
+  rel="$1"
+  src="$PRIVATE/$rel"
+  dst="$DOTFILES_ROOT/$rel"
+  target="$(link_target "$rel")"
+
+  if [ -L "$dst" ]
+  then
+    if [ "$(readlink "$dst")" = "$target" ]
+    then
+      return
+    fi
+    echo "  [WARN] $rel is a symlink to $(readlink "$dst"), leaving it alone"
+    return
+  fi
+
+  if [ -d "$dst" ]
+  then
+    if ! diff -rq "$dst" "$src" >/dev/null 2>&1
+    then
+      echo "  [WARN] $rel differs from private copy, compare: diff -r $dst $src"
+      return
+    fi
+    rm -r "$dst"
+  elif [ -e "$dst" ]
+  then
+    if ! cmp -s "$dst" "$src"
+    then
+      echo "  [WARN] $rel differs from private copy, compare: diff $dst $src"
+      return
+    fi
+  fi
+
+  mkdir -p "$(dirname "$dst")"
+  ln -sfn "$target" "$dst"
+  echo "  [ OK ] linked $rel"
+}
+
+git -C "$PRIVATE" ls-files --cached --others --exclude-standard |
+  grep -v -e '^README.local.md$' -e '^\.gitignore$' -e '^\.claude/plans/' |
+  while read -r rel
+  do
+    link "$rel"
+  done
+
+[ -d "$PRIVATE/.claude/plans" ] && link .claude/plans
+exit 0

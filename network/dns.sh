@@ -104,7 +104,7 @@ case "${1:-}" in
     rm -f "$DNS_OVERRIDE_FILE"
     echo "dns: override cleared, dns-switch.sh is back in control"
     # Let the agent reassert immediately rather than waiting for its next tick.
-    launchctl kickstart -k "gui/$(id -u)/com.local.dnsswitch" 2>/dev/null \
+    launchctl kickstart -k "gui/$(id -u)/com.user.dnsswitch" 2>/dev/null \
       || echo "dns: could not kick dns-switch, it will catch up within 5 minutes"
     ;;
 

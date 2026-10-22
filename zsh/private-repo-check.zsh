@@ -1,7 +1,7 @@
 _private_repo_precmd() {
   [[ -t 1 ]] || return
   [[ "$PWD" == "$HOME/.dotfiles"* ]] || return
-  local priv_dir="$HOME/.dotfiles-private"
+  local priv_dir="$HOME/.dotfiles/private"
   [[ -d "$priv_dir/.git" ]] || return
 
   local priv_status

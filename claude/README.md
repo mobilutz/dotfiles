@@ -24,9 +24,9 @@ The base `script/bootstrap` only symlinks `*.symlink` files into `$HOME`, which 
 `~/.claude/settings.json` is **generated, not symlinked**. `install.sh` deep-merges:
 
 1. `claude/settings.json` from this public repo
-2. `~/.dotfiles-private/claude/settings.local.json`, if present
+2. `claude/settings.local.json`, if present
 
-Same `*.local.*` convention as the rest of the repo, except the overlay itself lives in `~/.dotfiles-private/` so it is versioned across machines without ever touching this public repo. Copy `settings.local.json.example` there to start one.
+Same `*.local.*` convention as the rest of the repo: ignored here, the file itself lives in the nested private repo `private/claude/settings.local.json` and `script/link-private` links it here, so it syncs across machines without ever touching this public repo. Copy `settings.local.json.example` to start one.
 
 Objects merge key-by-key, arrays are replaced wholesale by the overlay. Use it for anything that identifies a client or employer — private plugin marketplaces, the plugins installed from them, work-only permission rules.
 

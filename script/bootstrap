@@ -327,6 +327,14 @@ setup_oh_my_zsh () {
   [ -d "$custom_dir/plugins/zsh-autosuggestions" ] || git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$custom_dir/plugins/zsh-autosuggestions"
 }
 
+# Runs before setup_gitconfig: a git/gitconfig.local.symlink from the private
+# repo makes generating one from the example unnecessary.
+link_private () {
+  info 'linking private overlay'
+  script/link-private
+}
+
+link_private
 setup_gitconfig
 install_packages
 setup_login_shell

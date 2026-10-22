@@ -45,16 +45,22 @@ fi
 # DNS switch: sets DNS servers based on the network the machine is attached to
 # ---------------------------------------------------------------------------
 
-DNS_PLIST_SRC="$DOTFILES_ROOT/network/com.local.dnsswitch.plist"
-DNS_PLIST_DST="$HOME/Library/LaunchAgents/com.local.dnsswitch.plist"
+DNS_PLIST_SRC="$DOTFILES_ROOT/network/com.user.dnsswitch.plist"
+DNS_PLIST_DST="$HOME/Library/LaunchAgents/com.user.dnsswitch.plist"
+
+# The agent used to be called com.local.dnsswitch; that name matched the
+# *.local.* gitignore rule, so the template never reached a fresh clone.
+# Remove the old agent so the script does not run twice.
+launchctl bootout "gui/$UID/com.local.dnsswitch" 2>/dev/null || true
+rm -f "$HOME/Library/LaunchAgents/com.local.dnsswitch.plist"
 
 # Inject the real dotfiles path into the plist
 sed "s|DOTFILES_PATH|$DOTFILES_ROOT|g" "$DNS_PLIST_SRC" > "$DNS_PLIST_DST"
 chmod 644 "$DNS_PLIST_DST"
 
-launchctl bootout "gui/$UID/com.local.dnsswitch" 2>/dev/null || true
+launchctl bootout "gui/$UID/com.user.dnsswitch" 2>/dev/null || true
 launchctl bootstrap "gui/$UID" "$DNS_PLIST_DST"
-launchctl kickstart -k "gui/$UID/com.local.dnsswitch"
+launchctl kickstart -k "gui/$UID/com.user.dnsswitch"
 
 echo "  ✓ DNS switch agent installed (log: ~/Library/Logs/dns-switch.log)"
 

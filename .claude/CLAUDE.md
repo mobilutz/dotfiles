@@ -66,9 +66,13 @@ This repo has two remotes: `origin` (github.com/mobilutz/dotfiles) is the real r
 
 ## Private Config Repo
 
-Machine-specific secrets/identity are versioned in a SEPARATE private repo at `~/.dotfiles-private/` (regular git repo), synced across machines without going into the public repo.
+Machine-specific secrets/identity are versioned in a SEPARATE private repo, synced across machines without going into the public repo.
 
-- **location:** `~/.dotfiles-private/` (regular repo, not bare)
-- **alias:** `priv` = `git -C $HOME/.dotfiles-private` (defined in `zsh/zshrc.local.symlink`)
+- **location:** `~/.dotfiles/private/`, a normal nested repo, ignored by the public `.gitignore`. VS Code shows it as a second repository
+- **rule:** every `*.local.*` file lives in `private/<topic>/...`. `script/link-private` (run by bootstrap and `dot`) symlinks each one back to the same path in the public tree, so consumers find it where they expect it. `.claude/plans` is linked as a whole directory
+- **alias:** `priv` = `git -C $HOME/.dotfiles/private` (defined in `zsh/zshrc.local.symlink`)
+- **adding a file:** create it in `private/<topic>/`, commit there, run `script/link-private`
+- **sourcing:** the loader skips `private/`, but the links in the public tree are sourced via `**/*.zsh`, so a private helper library must not end in `.zsh` (e.g. `ocp/lib.local.zsh.inc`)
+- **never name a public file `*.local.*`** — it would be ignored (that is why the launchd template is `com.user.dnsswitch.plist`)
 
-**How to apply:** Before committing any file, confirm no plaintext secrets: store secrets as `op://` 1Password references. New-machine bootstrap: `git clone <remote> ~/.dotfiles-private`. The `.example` template files belong in the PUBLIC repo, not the private one.
+**How to apply:** Before committing any file, confirm no plaintext secrets: store secrets as `op://` 1Password references. New-machine bootstrap: see `private/README.local.md`. The `.example` template files belong in the PUBLIC repo, not the private one.

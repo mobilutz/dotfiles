@@ -69,6 +69,13 @@ export DOTZSH=$HOME/.dotfiles
 echo "› git pull"
 git -C $DOTZSH pull
 
+# Nested private repo (see script/link-private); absent on machines without it
+if [ -d "$DOTZSH/private/.git" ]; then
+	echo "› git pull (private)"
+	git -C $DOTZSH/private pull
+	$DOTZSH/script/link-private
+fi
+
 # For unattended fleet updates: take the new files, install nothing
 if [ ${pullOnly} = 'true' ]; then
 	exit 0

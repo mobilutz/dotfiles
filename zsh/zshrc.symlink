@@ -161,6 +161,10 @@ export DISABLE_UPDATE_PROMPT=true
 typeset -U config_files
 config_files=($DOTZSH/**/*.zsh)
 
+# private/ is a nested repo whose files are linked back into the topics,
+# sourcing it directly would load every private file twice
+config_files=(${config_files:#$DOTZSH/private/*})
+
 # drop the topic files that target a different OS
 for os in darwin linux
 do

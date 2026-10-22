@@ -3,6 +3,9 @@
 !*.local.example
 tmp
 
+# nested private repo, see README.local.md inside it
+private/
+
 # global ~/.gitignore blanket-ignores .claude/ — re-include only the
 # team-shared files, leave .claude/plans/ and settings.local.json ignored
 !.claude/
