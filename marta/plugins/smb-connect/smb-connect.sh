@@ -37,16 +37,22 @@ fi
 [[ -z $HOST ]] && exit 0
 
 # ---------- 2. list shares ----------
-# Try the remembered user without a password first: smbutil reuses an existing
-# session to the server, so no dialog is needed. Ask only when that fails.
+# List shares without asking: first through an existing session to the server
+# (smbutil reuses it), then with the password Finder saved in the Keychain.
+list_silently() {  # list_silently user → sets $listing
+  local pass
+  listing=$(smbutil view -N "//$(urlencode "$1")@$HOST" 2>/dev/null) && return
+  pass=$(keychain_password "$HOST" "$1") || return 1
+  listing=$(smbutil view -N "//$(urlencode "$1"):$(urlencode "$pass")@$HOST" 2>/dev/null)
+}
+
 SMBUSER=$(remembered_user "$HOST")
-if [[ -z $SMBUSER || $SMBUSER == guest ]] ||
-   ! listing=$(smbutil view -N "//$(urlencode "$SMBUSER")@$HOST" 2>/dev/null); then
+if [[ -z $SMBUSER || $SMBUSER == guest ]] || ! list_silently "$SMBUSER"; then
   SMBUSER=$(ask "Username on $HOST (enter \"guest\" for guest access):" "$(default_user "$HOST")") || exit 0
   if [[ $SMBUSER == guest ]]; then
     listing=$(smbutil view -G "//$HOST" 2>&1) ||
       die "Could not list shares on $HOST." "$listing"
-  elif ! listing=$(smbutil view -N "//$(urlencode "$SMBUSER")@$HOST" 2>/dev/null); then
+  elif ! list_silently "$SMBUSER"; then
     PASS=$(ask "Password for $SMBUSER on $HOST:" "" hidden) || exit 0
     listing=$(smbutil view -N "//$(urlencode "$SMBUSER"):$(urlencode "$PASS")@$HOST" 2>&1) ||
       die "Could not list shares on $HOST." "Wrong username/password, or the server is unreachable.

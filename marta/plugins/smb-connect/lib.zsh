@@ -139,6 +139,18 @@ find_mount() {  # find_mount host share [any]
   } | sed -nE 's/^.* on (.*) \(smbfs.*$/\1/p' | head -1
 }
 
+# ---------- credentials ----------
+
+# Password Finder saved for a host and user. Finder stores Bonjour hosts
+# with a trailing dot (e.g. "nas.local."), so both forms are tried.
+keychain_password() {  # keychain_password host user
+  local srv
+  for srv in "$1" "$1."; do
+    security find-internet-password -s "$srv" -a "$2" -w 2>/dev/null && return
+  done
+  return 1
+}
+
 # ---------- remembered users ----------
 
 remembered_user() {
