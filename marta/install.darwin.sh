@@ -22,3 +22,22 @@ for file in conf.marco favorites.marco; do
   ln -s "$src" "$dst"
   echo "  ✓ Linked $file"
 done
+
+# Plugins are linked as whole folders. A replaced folder is moved out of
+# Plugins/, because Marta would load a backup inside it as a second plugin.
+mkdir -p "$MARTA_DIR/Plugins"
+
+for plugin in "$DOTFILES_ROOT"/marta/plugins/*/; do
+  name="$(basename "$plugin")"
+  dst="$MARTA_DIR/Plugins/$name"
+
+  if [ -L "$dst" ]; then
+    rm "$dst"
+  elif [ -e "$dst" ]; then
+    mv "$dst" "$MARTA_DIR/$name.plugin.backup"
+    echo "  ✓ Existing plugin $name moved to $name.plugin.backup"
+  fi
+
+  ln -s "${plugin%/}" "$dst"
+  echo "  ✓ Linked plugin $name"
+done

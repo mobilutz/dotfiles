@@ -1,0 +1,107 @@
+#!/bin/zsh
+# smb-connect — find SMB servers on the local network, list their shares,
+# mount the one you pick, and open it in Marta.
+#
+# Usage:  smb-connect            (pick from cached servers, rescan in background)
+#         smb-connect <host/IP>  (skip the server list, go straight to a server)
+
+emulate -L zsh
+setopt pipefail
+source "${0:A:h}/../marta/plugins/smb-connect/lib.zsh"
+
+die()  { print -u2 -- "✖ $*"; exit 1 }
+info() { print -- "→ $*" }
+
+# ---------- pick a server ----------
+if [[ -n $1 ]]; then
+  HOST=$1
+else
+  if [[ -s $SERVERS_FILE ]]; then
+    refresh_cache &!
+  else
+    info "Scanning the network for SMB servers (${SCAN_SECONDS}s)…"
+    refresh_cache
+  fi
+  RESCAN="Rescan network…"
+  MANUAL="Enter address manually…"
+  while true; do
+    build_server_menu
+    print "\nSMB servers (last scan: $(last_scan_label)):"
+    PS3=$'\nServer #: '
+    select choice in "${MENU_LABELS[@]}" "$RESCAN" "$MANUAL"; do
+      [[ -n $choice ]] && break
+    done
+    [[ -z $choice ]] && exit 1
+    [[ $choice == "$RESCAN" ]] || break
+    info "Scanning the network for SMB servers (${SCAN_SECONDS}s)…"
+    refresh_cache
+  done
+  if [[ $choice == "$MANUAL" ]]; then
+    read "HOST?Hostname or IP: "
+  else
+    HOST=$(server_host "${MENU_NAME[$choice]}")
+    info "${MENU_NAME[$choice]} → $HOST"
+  fi
+fi
+[[ -z $HOST ]] && die "No server given."
+
+# ---------- credentials ----------
+DEFAULT_USER=$(default_user "$HOST")
+read "SMBUSER?Username (\"guest\" for guest access) [$DEFAULT_USER]: " || exit 1
+[[ -z $SMBUSER ]] && SMBUSER=$DEFAULT_USER
+[[ $SMBUSER == guest ]] && GUEST=1
+
+# ---------- list shares ----------
+info "Fetching shares from $HOST…"
+if [[ -n $GUEST ]]; then
+  listing=$(smbutil view -G "//$HOST") || die "Could not list shares (guest access refused?)."
+else
+  listing=$(smbutil view "//$(urlencode "$SMBUSER")@$HOST") || die "Could not list shares (wrong password or host unreachable?)."
+fi
+remember_user "$HOST" "$SMBUSER"
+
+shares=("${(@f)$(print -r -- "$listing" | parse_shares)}")
+shares=(${shares:#})
+(( ${#shares} )) || die "No accessible disk shares found on $HOST."
+
+typeset -A SHARE_OF
+labels=()
+for s in "${shares[@]}"; do
+  label=$s
+  [[ -n $(find_mount "$HOST" "$s") ]] && label+="  (mounted)"
+  labels+=("$label")
+  SHARE_OF[$label]=$s
+done
+print
+PS3=$'\nShare #: '
+select choice in "${labels[@]}"; do
+  [[ -n $choice ]] && break
+done
+[[ -z $choice ]] && exit 1
+SHARE=${SHARE_OF[$choice]}
+
+# ---------- mount ----------
+MP=$(find_mount "$HOST" "$SHARE")
+if [[ -n $MP ]]; then
+  info "Already mounted at $MP"
+else
+  URL="smb://$(urlencode "$SMBUSER")@$HOST/$(urlencode "$SHARE")"
+  info "Mounting $URL (macOS may ask for the password)…"
+  open "$URL" || die "macOS could not open $URL"
+  for i in {1..60}; do              # wait up to 60s (password dialog)
+    MP=$(find_mount "$HOST" "$SHARE" any); [[ -n $MP ]] && break
+    sleep 1
+  done
+  [[ -z $MP ]] && die "Share did not mount within 60s."
+  info "Mounted at $MP"
+fi
+
+# ---------- open in Marta ----------
+LAUNCHER=/Applications/Marta.app/Contents/Resources/launcher
+if command -v marta >/dev/null; then
+  marta "$MP"
+elif [[ -x $LAUNCHER ]]; then
+  "$LAUNCHER" "$MP"
+else
+  open -a Marta "$MP"
+fi
