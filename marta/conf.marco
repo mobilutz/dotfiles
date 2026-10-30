@@ -26,4 +26,6 @@ keyBindings {
     "Opt+Down" "core.move.end"    
     "Cmd+N" "core.new.folder"
     "Cmd+Shift+N" "core.new.window"
+    "Cmd+Shift+K" "net.lengemann.smbconnect.connect"
+    "Cmd+Shift+D" "net.lengemann.smbconnect.disconnect"
 }
