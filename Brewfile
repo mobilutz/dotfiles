@@ -20,12 +20,14 @@ brew 'duti' # assigns default apps to file types
 brew 'esphome'
 brew 'esptool'
 brew 'eza'
+brew 'findutils'
 # brew 'gatsby-cli' # use gatsby via mise or npx
 brew 'gh'
 brew 'git'
 brew 'git-secrets'
 brew 'gitleaks'
 brew 'gnu-sed'
+brew 'grep'
 brew 'helm'
 # brew 'heroku' # 2026-10-15 Not needed anymore, no heroku app development anymore
 brew 'hugo'
