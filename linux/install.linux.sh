@@ -3,8 +3,8 @@
 # apt counterpart of `brew bundle`: installs what linux/packages.txt lists.
 #
 # Only packages that are missing AND available in the configured apt sources
-# are installed, so a Debian 12 machine simply ends up without eza rather than
-# failing the whole run.
+# are installed, so a package missing from an older Debian release is skipped
+# rather than failing the whole run.
 
 set -e
 

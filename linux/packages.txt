@@ -24,9 +24,5 @@ htop
 # `pubkey` copies to the clipboard when there is a display
 xclip
 
-# eza is only packaged from Debian 13 (trixie) on. On bookworm the install
-# script skips it and `ls` falls back to GNU coreutils, which `ll` rides on.
-eza
-
 # For the MQTT scripts running on these Pis
 python3-paho-mqtt

@@ -19,7 +19,6 @@ brew 'coreutils'
 brew 'duti' # assigns default apps to file types
 brew 'esphome'
 brew 'esptool'
-brew 'eza'
 brew 'findutils'
 # brew 'gatsby-cli' # use gatsby via mise or npx
 brew 'gh'

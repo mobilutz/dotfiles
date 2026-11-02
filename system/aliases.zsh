@@ -7,18 +7,18 @@ if (( $+commands[gls] ))
 then
   alias ls="gls -F --color"
   alias l="gls -lAh --color"
-  alias ll="gls -l --color"
+  alias ll="gls -lah --color"
   alias la='gls -A --color'
 elif command ls --version 2>/dev/null | grep -q coreutils
 then
   alias ls="command ls -F --color"
   alias l="command ls -lAh --color"
-  alias ll="command ls -l --color"
+  alias ll="command ls -lah --color"
   alias la='command ls -A --color'
 else
   # BSD ls, i.e. macOS without coreutils
   alias ls="command ls -FG"
   alias l="command ls -lAh"
-  alias ll="command ls -l"
+  alias ll="command ls -lah"
   alias la="command ls -A"
 fi

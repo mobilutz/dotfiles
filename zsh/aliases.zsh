@@ -3,11 +3,6 @@ alias reload!='. ~/.zshrc'
 alias cls='clear' # Good 'ol Clear Screen command
 # alias cat='bat'
 
-# eza is a nicer ls but is not packaged before Debian 13. Without it `ls` keeps
-# whatever system/aliases.zsh resolved it to, and `ll` rides on either.
-(( $+commands[eza] )) && alias ls='eza'
-alias ll='ls -ahl'
-
 if (( $+commands[code] ))
 then
   alias zshconfig="code ~/.zshrc"
