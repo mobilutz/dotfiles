@@ -1,0 +1,18 @@
+# Remove relative entries from $path and warn about each one.
+# A relative entry ("./bin", ".", "bin", or an empty one, which means the
+# current directory) lets any directory you cd into shadow real commands.
+
+local entry
+local -a safe_path removed
+for entry in "${path[@]}"; do
+  if [[ $entry == /* ]]; then
+    safe_path+=("$entry")
+  else
+    removed+=("${entry:-<empty>}")
+  fi
+done
+
+(( ${#removed} )) || return 0
+
+path=("${safe_path[@]}")
+print -u2 "path_guard: removed relative PATH entries: ${(j:, :)${(@u)removed}}"

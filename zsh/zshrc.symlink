@@ -242,3 +242,10 @@ unset _syntax_highlighting
 
 # Added by the Postman CLI installer
 export PATH='/Users/ll/.local/bin':"$PATH"
+
+# Keep relative entries like ./bin out of PATH. Runs once now and again before
+# every prompt, after mise's hook, so lines installers append below this one and
+# PATH rebuilds by mise are covered too.
+path_guard
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd path_guard
