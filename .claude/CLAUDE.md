@@ -70,7 +70,6 @@ Machine-specific secrets/identity are versioned in a SEPARATE private repo, sync
 
 - **location:** `~/.dotfiles/private/`, a normal nested repo, ignored by the public `.gitignore`. VS Code shows it as a second repository
 - **rule:** every `*.local.*` file lives in `private/<topic>/...`. `script/link-private` (run by bootstrap and `dot`) symlinks each one back to the same path in the public tree, so consumers find it where they expect it. `.claude/plans` is linked as a whole directory
-- **alias:** `priv` = `git -C $HOME/.dotfiles/private` (defined in `zsh/zshrc.local.symlink`)
 - **adding a file:** create it in `private/<topic>/`, commit there, run `script/link-private`
 - **sourcing:** the loader skips `private/`, but the links in the public tree are sourced via `**/*.zsh`, so a private helper library must not end in `.zsh` (e.g. `ocp/lib.local.zsh.inc`)
 - **never name a public file `*.local.*`** — it would be ignored (that is why the launchd template is `com.user.dnsswitch.plist`)
