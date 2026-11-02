@@ -28,10 +28,12 @@ echo "  ✓ USB audio fix agent installed (log: ~/Library/Logs/fix-usb-audio.log
 
 # Grant the two exact commands the script runs, not a killall wildcard: a
 # wildcard would let any process running as this user kill any root daemon.
+# SETENV on coreaudiod: Homebrew casks with audio drivers run it as `sudo -E`,
+# and a matching rule without SETENV makes sudo refuse that outright.
 AUDIO_SUDOERS_FILE="/etc/sudoers.d/fix-usb-audio"
 AUDIO_SUDOERS_CONTENT="$(
   echo "$(whoami) ALL=(ALL) NOPASSWD: /usr/bin/killall usbaudiod"
-  echo "$(whoami) ALL=(ALL) NOPASSWD: /usr/bin/killall coreaudiod"
+  echo "$(whoami) ALL=(ALL) NOPASSWD:SETENV: /usr/bin/killall coreaudiod"
 )"
 
 if [ "$(sudo cat "$AUDIO_SUDOERS_FILE" 2>/dev/null)" != "$AUDIO_SUDOERS_CONTENT" ]; then

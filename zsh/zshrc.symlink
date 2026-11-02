@@ -239,3 +239,6 @@ do
   [[ -r $_syntax_highlighting ]] && source $_syntax_highlighting && break
 done
 unset _syntax_highlighting
+
+# Added by the Postman CLI installer
+export PATH='/Users/ll/.local/bin':"$PATH"
