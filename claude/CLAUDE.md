@@ -24,6 +24,7 @@ NEVER write scratch files (curl output, header dumps, cookie jars, log copies, e
 
 - favour readable source code over code comments
 - write source code comments only in english, NEVER use emoticons in comments
+- never name functions `xxxOf()` (e.g. `labelOf`, `detailsOf`, `eventLogRowsOf`); the wording is disliked, pick a different name (e.g. `toLabel`, `buildEventLogRows`)
 
 ## Shell Tools
 
