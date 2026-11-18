@@ -13,16 +13,28 @@ LOG="$HOME/Library/Logs/copy-screenshot-to-clipboard.log"
 [ -d "$DIR" ] || exit 0
 
 # Newest image file in the folder (png/jpg/jpeg, case-insensitive).
-NEWEST=$(/usr/bin/find "$DIR" -maxdepth 1 -type f \
-  \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) \
-  -print0 2>/dev/null \
-  | xargs -0 ls -t 2>/dev/null \
-  | head -1)
+# Hidden files are macOS's half-written temp files before the final rename.
+find_newest() {
+  /usr/bin/find "$DIR" -maxdepth 1 -type f -not -name '.*' \
+    \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) \
+    -print0 2>/dev/null \
+    | xargs -0 ls -t 2>/dev/null \
+    | head -1
+}
+
+LAST=$(cat "$STATE" 2>/dev/null || true)
+
+# The folder event can fire before the final file exists, and launchd may not
+# fire again for the rename, so poll briefly (up to ~5 s) for a new file.
+for _ in $(seq 25); do
+  NEWEST=$(find_newest)
+  [ -n "$NEWEST" ] && [ "$NEWEST" != "$LAST" ] && break
+  sleep 0.2
+done
 
 [ -n "$NEWEST" ] || exit 0
 
 # Skip if we already copied this exact file (WatchPaths can fire multiple times).
-LAST=$(cat "$STATE" 2>/dev/null || true)
 [ "$NEWEST" = "$LAST" ] && exit 0
 
 # macOS sometimes writes the screenshot atomically via rename; give it a moment
