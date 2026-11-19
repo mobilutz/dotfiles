@@ -840,16 +840,12 @@
   ##################################[ context: user@hostname ]##################################
   # Context color when running with privileges.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=178
-  # Per-host label and color live in the private repo; unknown hosts show %m in 180.
-  local host_label='%m' host_color=180
-  local host_map=${${(%):-%x}:A:h}/p10k-hosts.local.zsh.inc
-  [[ ! -r $host_map ]] || source $host_map
-  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO,REMOTE,REMOTE_SUDO}_FOREGROUND=$host_color
+  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO,REMOTE,REMOTE_SUDO}_FOREGROUND=180
 
-  # Context format when running with privileges: bold user@host.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE="%B%n@$host_label"
-  # Everyone else: host only, always shown (local too).
-  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO,REMOTE,REMOTE_SUDO}_TEMPLATE=$host_label
+  # Context format when running with privileges: bold user@hostname.
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%B%n@%m'
+  # Everyone else: hostname only, always shown (local too).
+  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO,REMOTE,REMOTE_SUDO}_TEMPLATE='%m'
 
   # Custom icon.
   # typeset -g POWERLEVEL9K_CONTEXT_VISUAL_IDENTIFIER_EXPANSION='⭐'
