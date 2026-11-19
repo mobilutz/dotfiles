@@ -104,8 +104,9 @@ DISABLE_MAGIC_FUNCTIONS="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Silence ssh-add output - https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent#ssh-add-args
-zstyle :omz:plugins:ssh-agent ssh-add-args -q
+# Silence the ssh-agent plugin: no "Starting ssh-agent ..." (breaks the p10k instant prompt on servers
+# without a forwarded agent) and ssh-add -q - https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
+zstyle :omz:plugins:ssh-agent quiet yes
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
